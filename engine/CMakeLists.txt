@@ -1,6 +1,11 @@
 set(FIREWORK_SOURCE
-    "src/window/Window.cpp"
-    "../glad/src/glad.c"
+"../glad/src/glad.c"
+"src/core/Scene.cpp"
+"src/render/Action.cpp"
+"src/render/Framebuffer.cpp"
+"src/render/Renderer.cpp"
+"src/render/RenderPass.cpp"
+"src/window/Window.cpp"
 )
 
 set(FIREWORK_LIBRARIES
