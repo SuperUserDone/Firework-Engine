@@ -16,6 +16,7 @@ find_package(glfw3 3.3 REQUIRED)
 include_directories(
     "engine/include"
     "glad/include"
+    "glm/"
 )
 
 add_subdirectory("engine")

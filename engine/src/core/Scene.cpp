@@ -38,6 +38,18 @@ std::vector<Action> Scene::get_unloadq()
 
 /*******************************************************************************/
 
+void Scene::add_object(std::shared_ptr<ObjectBasic> obj)
+{
+    m_load_actions.push_back(obj->get_load_action());
+    m_objects.push_back(obj);
+}
+
+/*******************************************************************************/
+
+void Scene::add_light(std::shared_ptr<ObjectLight> obj) {}
+
+/*******************************************************************************/
+
 void Scene::render_forward()
 {
     if (!m_cameras.empty())

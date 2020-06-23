@@ -11,8 +11,7 @@ Renderer::Renderer() { m_hard_timer = m_soft_timer = Clock::now(); }
 
 void Renderer::process_queue(int count, std::queue<Core::Action> &queue)
 {
-    if (!m_lock_update.try_lock())
-        return;
+    std::lock_guard<std::mutex> lock(m_lock_update);
 
     int presize = queue.size();
 
@@ -38,8 +37,6 @@ void Renderer::process_queue(int count, std::queue<Core::Action> &queue)
                 break;
         }
     }
-
-    m_lock_update.unlock();
 }
 /*******************************************************************************/
 

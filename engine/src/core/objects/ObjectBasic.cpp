@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "core/objects/ObjectBasic.hpp"
 
 namespace FW
@@ -9,7 +11,12 @@ void ObjectBasic::load_assets() {}
 
 /*******************************************************************************/
 
-void ObjectBasic::load_ogl() {}
+void ObjectBasic::load_ogl()
+{
+    std::for_each(std::begin(m_components), std::end(m_components),
+                  [](std::shared_ptr<Component> comp) { comp->load_ogl(); });
+    m_loaded = true;
+}
 
 /*******************************************************************************/
 
@@ -21,7 +28,11 @@ ObjectBasic::ObjectBasic() {}
 
 /*******************************************************************************/
 
-Action ObjectBasic::get_load_action() {}
+Action ObjectBasic::get_load_action()
+{
+    return Action(std::bind(&ObjectBasic::load_assets, this),
+                  std::bind(&ObjectBasic::load_ogl, this));
+}
 
 /*******************************************************************************/
 
@@ -44,7 +55,12 @@ void ObjectBasic::setup_render() {}
 
 /*******************************************************************************/
 
-void ObjectBasic::render_forward() const {}
+void ObjectBasic::render_forward() const
+{
+    std::for_each(
+        std::begin(m_components), std::end(m_components),
+        [](std::shared_ptr<Component> comp) { comp->render_forward(); });
+}
 
 /*******************************************************************************/
 

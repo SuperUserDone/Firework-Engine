@@ -9,6 +9,7 @@ set(FIREWORK_SOURCE
 "src/core/objects/ObjectLight.cpp"
 "src/core/objects/ObjectBasic.cpp"
 "src/render/Framebuffer.cpp"
+"src/render/MeshRenderer.cpp"
 "src/render/Renderer.cpp"
 "src/render/RenderPass.cpp"
 "src/window/Window.cpp"

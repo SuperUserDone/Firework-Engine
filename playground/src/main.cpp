@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <core/Scene.hpp>
+#include <core/components/ComponentMesh.hpp>
 #include <render/Renderer.hpp>
 #include <window/Window.hpp>
 
@@ -13,13 +14,17 @@ int main()
 
     FW::Window::Window win(settings);
     FW::Render::Renderer renderer;
+    auto obj = std::make_shared<FW::Core::ObjectBasic>();
+    auto mesh = std::make_shared<FW::Core::ComponentMesh>();
+    obj->add_component(mesh);
     FW::Core::Scene test_scene;
+    test_scene.add_object(obj);
 
     renderer.add_pipeline_step(FW::Render::RENDERPASS_FORWARD);
 
     while (!win.check_close())
     {
-        if(renderer.smart_frame(test_scene));
+        if (renderer.smart_frame(test_scene))
         {
             win.swap_buffers();
             glClear(GL_COLOR_BUFFER_BIT);

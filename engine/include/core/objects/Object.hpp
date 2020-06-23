@@ -37,7 +37,7 @@ public:
     virtual Action get_update_action() = 0;
 
     // Components
-    void add_component(std::shared_ptr<Component> comp);
+    virtual void add_component(std::shared_ptr<Component> comp);
 
     // Checks
     virtual bool is_loaded() const;

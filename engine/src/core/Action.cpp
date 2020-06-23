@@ -9,7 +9,6 @@ Action::Action(std::function<void()> async, std::function<void()> sync)
     : m_async(async), m_sync(sync)
 {
     async_thread = std::thread(std::bind(&Action::run_async, this));
-    async_thread.detach();
 }
 
 /*******************************************************************************/

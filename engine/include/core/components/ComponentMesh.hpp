@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/components/Component.hpp"
+#include "render/MeshRenderer.hpp"
 
 namespace FW
 {
@@ -10,6 +11,8 @@ namespace Core
 class ComponentMesh : public Component
 {
 protected:
+    Render::MeshRenderer m_renderer;
+
 public:
     ComponentMesh();
 
