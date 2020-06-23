@@ -6,7 +6,7 @@
 
 namespace FW
 {
-namespace Render
+namespace Core
 {
 
 class Action
@@ -24,7 +24,7 @@ private:
     std::thread async_thread;
 
 public:
-    Action(const FW::Render::Action &old);
+    Action(const Action &old);
 
     Action(std::function<void()> async, std::function<void()> sync);
 
@@ -33,5 +33,5 @@ public:
     ~Action();
 };
 
-} // namespace Render
+} // namespace Core
 } // namespace FW

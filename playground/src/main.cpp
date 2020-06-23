@@ -19,8 +19,11 @@ int main()
 
     while (!win.check_close())
     {
-        renderer.smart_frame(test_scene);
-        win.swap_buffers();
+        if(renderer.smart_frame(test_scene));
+        {
+            win.swap_buffers();
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
         win.poll_events();
     }
 

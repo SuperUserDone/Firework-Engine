@@ -9,9 +9,11 @@
 #include <thread>
 #include <vector>
 
+#include "core/Action.hpp"
 #include "core/Scene.hpp"
-#include "render/Action.hpp"
 #include "render/RenderPass.hpp"
+
+#define ns_cast(x) std::chrono::duration_cast<std::chrono::nanoseconds>(x)
 
 using Clock = std::chrono::high_resolution_clock;
 using namespace std::chrono_literals;
@@ -25,18 +27,19 @@ class Renderer
 {
 private:
     // Locks
-    std::mutex m_lock_load;
     std::mutex m_lock_update;
 
     // Queue for backend opengl stuff
-    std::queue<Action> m_load_actions;
-    std::queue<Action> m_update_actions;
+    std::queue<Core::Action> m_load_actions;
+    std::queue<Core::Action> m_unload_actions;
+    std::queue<Core::Action> m_update_actions;
 
     // The render pipeline
     std::vector<RenderPass> m_render_pipeline;
 
     // The max no. of actions to be performed
     uint16_t m_max_load_batch = 10;
+    uint16_t m_max_unload_batch = 400;
     uint16_t m_max_update_batch = 400;
 
     // FPS stuff
@@ -62,8 +65,7 @@ private:
     std::chrono::time_point<Clock> m_soft_timer;
 
     // Opengl backend action process
-    void process_updates(int count);
-    void process_loads(int count);
+    void process_queue(int count, std::queue<Core::Action> &queue);
 
 public:
     Renderer();
@@ -72,11 +74,11 @@ public:
     void add_pipeline_step(RenderPass pass);
 
     // Add to Qs
-    void add_load_action(Action &action);
-    void add_update_action(Action &action);
+    void add_load_action(const Core::Action &action);
+    void add_update_action(const Core::Action &action);
 
     // Rendering
-    void smart_frame(Core::Scene &scene);
+    bool smart_frame(Core::Scene &scene);
     bool frame(Core::Scene &scene);
 
     ~Renderer();

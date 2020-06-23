@@ -1,8 +1,8 @@
-#include "render/Action.hpp"
+#include "core/Action.hpp"
 
 namespace FW
 {
-namespace Render
+namespace Core
 {
 
 Action::Action(std::function<void()> async, std::function<void()> sync)
@@ -14,7 +14,7 @@ Action::Action(std::function<void()> async, std::function<void()> sync)
 
 /*******************************************************************************/
 
-Action::Action(const FW::Render::Action &old)
+Action::Action(const Action &old)
 {
     m_async = old.m_async;
     m_sync = old.m_sync;
@@ -59,5 +59,5 @@ Action::~Action()
         async_thread.join();
 }
 
-} // namespace Render
+} // namespace Core
 } // namespace FW

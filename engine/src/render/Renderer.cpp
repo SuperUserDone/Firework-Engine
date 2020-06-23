@@ -9,12 +9,12 @@ Renderer::Renderer() { m_hard_timer = m_soft_timer = Clock::now(); }
 
 /*******************************************************************************/
 
-void Renderer::process_updates(int count)
+void Renderer::process_queue(int count, std::queue<Core::Action> &queue)
 {
     if (!m_lock_update.try_lock())
         return;
 
-    int presize = m_update_actions.size();
+    int presize = queue.size();
 
     if (presize <= 0)
         return;
@@ -26,14 +26,14 @@ void Renderer::process_updates(int count)
     int max_try = 10;
 
     // PROCESS THEM Q
-    while (m_update_actions.size() != presize - count)
+    while (queue.size() != presize - count)
     {
-        if (m_update_actions.front().do_action())
-            m_update_actions.pop();
+        if (queue.front().do_action())
+            queue.pop();
         else
         {
-            m_update_actions.push(m_update_actions.front());
-            m_update_actions.pop();
+            queue.push(queue.front());
+            queue.pop();
             if (--max_try <= 0)
                 break;
         }
@@ -41,42 +41,6 @@ void Renderer::process_updates(int count)
 
     m_lock_update.unlock();
 }
-
-/*******************************************************************************/
-
-void Renderer::process_loads(int count)
-{
-    if (!m_lock_load.try_lock())
-        return;
-
-    int presize = m_load_actions.size();
-
-    if (presize <= 0)
-        return;
-
-    if (count > presize)
-        count = presize;
-
-    // TODO Make this "Smarter"
-    int max_try = 10;
-
-    // PROCESS THEM Q
-    while (m_load_actions.size() != presize - count)
-    {
-        if (m_load_actions.front().do_action())
-            m_load_actions.pop();
-        else
-        {
-            m_load_actions.push(m_load_actions.front());
-            m_load_actions.pop();
-            if (--max_try <= 0)
-                break;
-        }
-    }
-
-    m_lock_load.unlock();
-}
-
 /*******************************************************************************/
 
 void Renderer::add_pipeline_step(RenderPass pass)
@@ -86,15 +50,15 @@ void Renderer::add_pipeline_step(RenderPass pass)
 
 /*******************************************************************************/
 
-void Renderer::add_load_action(Action &action)
+void Renderer::add_load_action(const Core::Action &action)
 {
-    std::lock_guard<std::mutex> qlock(m_lock_load);
+    std::lock_guard<std::mutex> qlock(m_lock_update);
     m_load_actions.push(action);
 }
 
 /*******************************************************************************/
 
-void Renderer::add_update_action(Action &action)
+void Renderer::add_update_action(const Core::Action &action)
 {
     std::lock_guard<std::mutex> qlock(m_lock_update);
     m_update_actions.push(action);
@@ -102,11 +66,12 @@ void Renderer::add_update_action(Action &action)
 
 /*******************************************************************************/
 
-void Renderer::smart_frame(Core::Scene &scene)
+bool Renderer::smart_frame(Core::Scene &scene)
 {
     // Merge qs
-    std::vector<Action> tmp_load = scene.get_loadq();
-    std::vector<Action> tmp_update = scene.get_updateq();
+    std::vector<Core::Action> tmp_load = scene.get_loadq();
+    std::vector<Core::Action> tmp_update = scene.get_updateq();
+    std::vector<Core::Action> tmp_unload = scene.get_unloadq();
 
     for (auto &&act : tmp_load)
     {
@@ -116,26 +81,33 @@ void Renderer::smart_frame(Core::Scene &scene)
     {
         m_update_actions.push(act);
     }
+    for (auto &&act : tmp_unload)
+    {
+        m_unload_actions.push(act);
+    }
 
     // Updates
     // TODO dynamic maxbatch settings
-    process_loads(m_max_load_batch);
-    process_updates(m_max_update_batch);
+    process_queue(m_max_unload_batch, m_unload_actions);
+    process_queue(m_max_load_batch, m_load_actions);
+    process_queue(m_max_update_batch, m_update_actions);
 
     // Continue with normal rendering
-    frame(scene);
+    return frame(scene);
 }
 
 /*******************************************************************************/
 
 bool Renderer::frame(Core::Scene &scene)
 {
+    bool return_val = false;
+
     // Clock things
-    auto interval = 1000ms / m_fps_target;
+    std::chrono::nanoseconds interval = ns_cast(1s) / m_fps_target;
     auto now = Clock::now();
 
     // Check if frame must be renderered
-    if (m_last_frame > now - interval)
+    if (m_last_frame + interval < now)
     {
         // Render Passes
         for (auto pass : m_render_pipeline)
@@ -153,6 +125,8 @@ bool Renderer::frame(Core::Scene &scene)
             }
         }
 
+        return_val = true;
+
         // Incement Frame Counters
         m_hard_frame_count++;
         m_soft_frame_count++;
@@ -163,12 +137,12 @@ bool Renderer::frame(Core::Scene &scene)
     }
 
     // Update fps counter
-    if (m_last_fps_update < now - m_fps_update_interval)
+    if (m_last_fps_update + m_fps_update_interval < now)
     {
         m_fps = m_delta_frame_count * (1000 / m_fps_update_interval.count());
         m_delta_frame_count = 0;
 
-        if (m_min_fps == 0)
+        if (m_min_fps <= 1)
             m_min_fps = m_fps;
 
         if (m_fps > m_max_fps)
@@ -178,9 +152,8 @@ bool Renderer::frame(Core::Scene &scene)
             m_min_fps = m_fps;
 
         m_last_fps_update = Clock::now();
-        std::cout << m_fps << std::endl;
     }
-    return true;
+    return return_val;
 }
 
 /*******************************************************************************/
