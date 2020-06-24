@@ -17,6 +17,9 @@ set(FIREWORK_SOURCE
 
 set(FIREWORK_LIBRARIES
     glfw
+    ${ASSIMP_LIBRARIES}
+    pthread
+    dl
 )
 
 add_library(FireworkEngine SHARED ${FIREWORK_SOURCE})
