@@ -20,6 +20,7 @@ int main()
     FW::Core::Scene test_scene;
     test_scene.add_object(obj);
 
+    renderer.add_pipeline_step(FW::Render::RENDERPASS_RESET);
     renderer.add_pipeline_step(FW::Render::RENDERPASS_FORWARD);
 
     while (!win.check_close())
@@ -27,7 +28,6 @@ int main()
         if (renderer.smart_frame(test_scene))
         {
             win.swap_buffers();
-            glClear(GL_COLOR_BUFFER_BIT);
         }
         win.poll_events();
     }

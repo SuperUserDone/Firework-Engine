@@ -21,14 +21,13 @@ private:
     void run_async();
     void run_sync();
 
-    std::thread async_thread;
-
 public:
     Action(const Action &old);
 
     Action(std::function<void()> async, std::function<void()> sync);
 
-    bool do_action();
+    bool try_async();
+    bool try_sync();
 
     ~Action();
 };

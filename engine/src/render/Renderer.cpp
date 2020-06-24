@@ -1,5 +1,7 @@
 #include "render/Renderer.hpp"
 
+#include <glad/glad.h>
+
 namespace FW
 {
 namespace Render
@@ -11,7 +13,7 @@ Renderer::Renderer() { m_hard_timer = m_soft_timer = Clock::now(); }
 
 void Renderer::process_queue(int count, std::queue<Core::Action> &queue)
 {
-    std::lock_guard<std::mutex> lock(m_lock_update);
+    std::lock_guard<std::mutex> lock(m_lock_sync);
 
     int presize = queue.size();
 
@@ -27,7 +29,7 @@ void Renderer::process_queue(int count, std::queue<Core::Action> &queue)
     // PROCESS THEM Q
     while (queue.size() != presize - count)
     {
-        if (queue.front().do_action())
+        if (queue.front().try_sync())
             queue.pop();
         else
         {
@@ -38,6 +40,73 @@ void Renderer::process_queue(int count, std::queue<Core::Action> &queue)
         }
     }
 }
+
+/*******************************************************************************/
+
+void Renderer::queue_async(Core::Action &action)
+{
+    using namespace std::placeholders;
+    if (m_active.size() < m_max_worker_cap)
+        m_active.resize(m_max_worker_cap, false);
+
+    if (m_worker_qs.size() < m_max_worker_cap)
+        m_worker_qs.resize(m_max_worker_cap);
+
+    if (m_async_workers.size() < m_max_worker_cap)
+    {
+        m_async_workers.clear();
+        m_worker_locks.clear();
+
+        for (int i = 0; i < m_max_worker_cap; i++)
+        {
+            m_worker_locks.emplace_back(std::make_shared<std::mutex>());
+
+            m_async_workers.emplace_back(std::bind(
+                &Renderer::async_worker, this, std::ref(m_worker_qs[i]), i));
+        }
+    }
+
+    int lowest_index = 0;
+    int lowest_size = m_worker_qs[0].size();
+
+    for (int i = 0; i < m_active.size(); i++)
+    {
+        if (lowest_size < m_worker_qs[i].size())
+        {
+            lowest_size = m_worker_qs[i].size();
+            lowest_index = i;
+        }
+    }
+
+    m_worker_locks[lowest_index]->lock();
+    m_worker_qs[lowest_index].push(action);
+    m_worker_locks[lowest_index]->unlock();
+}
+
+/*******************************************************************************/
+
+void Renderer::async_worker(std::queue<Core::Action> &queue, int index)
+{
+    bool empty = true;
+
+    while (m_running)
+    {
+        if (!empty)
+        {
+            m_worker_locks[index]->lock();
+
+            if (m_worker_qs[index].front().try_async())
+                m_worker_qs[index].pop();
+
+            m_worker_locks[index]->unlock();
+        }
+        else
+            std::this_thread::sleep_for(100ms);
+
+        empty = m_worker_qs[index].empty();
+    }
+}
+
 /*******************************************************************************/
 
 void Renderer::add_pipeline_step(RenderPass pass)
@@ -49,7 +118,7 @@ void Renderer::add_pipeline_step(RenderPass pass)
 
 void Renderer::add_load_action(const Core::Action &action)
 {
-    std::lock_guard<std::mutex> qlock(m_lock_update);
+    std::lock_guard<std::mutex> qlock(m_lock_sync);
     m_load_actions.push(action);
 }
 
@@ -57,7 +126,7 @@ void Renderer::add_load_action(const Core::Action &action)
 
 void Renderer::add_update_action(const Core::Action &action)
 {
-    std::lock_guard<std::mutex> qlock(m_lock_update);
+    std::lock_guard<std::mutex> qlock(m_lock_sync);
     m_update_actions.push(action);
 }
 
@@ -72,14 +141,17 @@ bool Renderer::smart_frame(Core::Scene &scene)
 
     for (auto &&act : tmp_load)
     {
+        queue_async(act);
         m_load_actions.push(act);
     }
     for (auto &&act : tmp_update)
     {
+        queue_async(act);
         m_update_actions.push(act);
     }
     for (auto &&act : tmp_unload)
     {
+        queue_async(act);
         m_unload_actions.push(act);
     }
 
@@ -119,6 +191,10 @@ bool Renderer::frame(Core::Scene &scene)
                 break;
             case RENDERPASS_UI:
                 scene.render_ui();
+                break;
+            case RENDERPASS_RESET:
+                glClear(GL_COLOR_BUFFER_BIT);
+                break;
             }
         }
 
@@ -155,7 +231,15 @@ bool Renderer::frame(Core::Scene &scene)
 
 /*******************************************************************************/
 
-Renderer::~Renderer() {}
+Renderer::~Renderer()
+{
+    m_running = false;
+    for (auto &&i : m_async_workers)
+    {
+        if (i.joinable())
+            i.join();
+    }
+}
 
 } // namespace Render
 } // namespace FW

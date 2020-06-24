@@ -8,7 +8,6 @@ namespace Core
 Action::Action(std::function<void()> async, std::function<void()> sync)
     : m_async(async), m_sync(sync)
 {
-    async_thread = std::thread(std::bind(&Action::run_async, this));
 }
 
 /*******************************************************************************/
@@ -40,7 +39,16 @@ void Action::run_sync()
 
 /*******************************************************************************/
 
-bool Action::do_action()
+bool Action::try_async()
+{
+    run_async();
+
+    return true;
+}
+
+/*******************************************************************************/
+
+bool Action::try_sync()
 {
     if (!m_done_async)
         return false;
@@ -52,11 +60,7 @@ bool Action::do_action()
 
 /*******************************************************************************/
 
-Action::~Action()
-{
-    if (async_thread.joinable())
-        async_thread.join();
-}
+Action::~Action() {}
 
 } // namespace Core
 } // namespace FW

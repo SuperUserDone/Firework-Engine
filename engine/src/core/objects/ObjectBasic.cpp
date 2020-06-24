@@ -7,7 +7,11 @@ namespace FW
 namespace Core
 {
 
-void ObjectBasic::load_assets() {}
+void ObjectBasic::load_assets()
+{
+    std::for_each(std::begin(m_components), std::end(m_components),
+                  [](std::shared_ptr<Component> comp) { comp->load_assets(); });
+}
 
 /*******************************************************************************/
 
