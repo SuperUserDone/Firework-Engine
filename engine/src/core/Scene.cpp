@@ -13,34 +13,8 @@ Scene::Scene() {}
 
 /*******************************************************************************/
 
-std::vector<Action> Scene::get_loadq()
-{
-    auto temp = m_load_actions;
-    m_load_actions.clear();
-    return temp;
-}
-
-/*******************************************************************************/
-
-std::vector<Action> Scene::get_updateq()
-{
-    auto temp = m_update_actions;
-    m_update_actions.clear();
-    return temp;
-}
-
-std::vector<Action> Scene::get_unloadq()
-{
-    auto temp = m_unload_actions;
-    m_unload_actions.clear();
-    return temp;
-}
-
-/*******************************************************************************/
-
 void Scene::add_object(std::shared_ptr<ObjectBasic> obj)
 {
-    m_load_actions.push_back(obj->get_load_action());
     m_objects.push_back(obj);
 }
 
@@ -57,10 +31,10 @@ void Scene::render_forward()
 
     bool lamps_update = false;
 
-    std::for_each(std::begin(m_lights), std::end(m_lights),
-                  [lamps_update](std::shared_ptr<ObjectLight> obj) {
-                      lamps_update | obj->should_gpu_update();
-                  });
+    for (auto &&lamp : m_lights)
+    {
+        // TODO Logic for checking updates
+    }
 
     if (lamps_update)
         update_lamps();
@@ -70,7 +44,7 @@ void Scene::render_forward()
                       obj->setup_render();
                       obj->render_forward();
                   });
-} // namespace Core
+}
 
 /*******************************************************************************/
 

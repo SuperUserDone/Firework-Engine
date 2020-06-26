@@ -4,21 +4,9 @@ namespace FW
 {
 namespace Core
 {
-
 Action::Action(std::function<void()> async, std::function<void()> sync)
     : m_async(async), m_sync(sync)
 {
-}
-
-/*******************************************************************************/
-
-Action::Action(const Action &old)
-{
-    m_async = old.m_async;
-    m_sync = old.m_sync;
-
-    m_done_async = old.m_done_async.load();
-    m_done_sync = old.m_done_sync.load();
 }
 
 /*******************************************************************************/
@@ -39,11 +27,10 @@ void Action::run_sync()
 
 /*******************************************************************************/
 
-bool Action::try_async()
+void Action::do_async()
 {
-    run_async();
-
-    return true;
+    if(!m_done_async)
+        run_async();
 }
 
 /*******************************************************************************/

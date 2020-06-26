@@ -17,10 +17,6 @@ namespace Core
 class Scene
 {
 private:
-    // Action qs
-    std::vector<Action> m_load_actions;
-    std::vector<Action> m_unload_actions;
-    std::vector<Action> m_update_actions;
 
     // Objects
     std::vector<std::shared_ptr<ObjectBasic>> m_objects;
@@ -32,11 +28,6 @@ private:
 
 public:
     Scene();
-
-    // Processing and actions
-    std::vector<Action> get_loadq();
-    std::vector<Action> get_unloadq();
-    std::vector<Action> get_updateq();
 
     // Add functions
     void add_object(std::shared_ptr<ObjectBasic> obj);

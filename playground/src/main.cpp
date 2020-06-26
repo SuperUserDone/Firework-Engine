@@ -2,6 +2,7 @@
 
 #include <core/Scene.hpp>
 #include <core/components/ComponentMesh.hpp>
+#include <core/components/ComponentMeshLoader.hpp>
 #include <render/Renderer.hpp>
 #include <window/Window.hpp>
 
@@ -15,7 +16,8 @@ int main()
     FW::Window::Window win(settings);
     FW::Render::Renderer renderer;
     auto obj = std::make_shared<FW::Core::ObjectBasic>();
-    auto mesh = std::make_shared<FW::Core::ComponentMesh>();
+    auto mesh = std::make_shared<FW::Core::ComponentMeshLoader>(
+        "./assets/models/monkey.fbx");
     obj->add_component(mesh);
     FW::Core::Scene test_scene;
     test_scene.add_object(obj);

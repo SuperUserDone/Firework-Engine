@@ -2,18 +2,28 @@
 
 #include <atomic>
 #include <functional>
+#include <memory>
+#include <queue>
 #include <thread>
+#include <vector>
 
 namespace FW
 {
 namespace Core
 {
 
+class Action;
+
+typedef std::shared_ptr<Action> ActionPtr;
+typedef std::vector<ActionPtr> ActionPtrVector;
+typedef std::queue<ActionPtr> ActionPtrQueue;
+typedef std::function<void()> ActionFun;
+
 class Action
 {
 private:
-    std::function<void()> m_async;
-    std::function<void()> m_sync;
+    ActionFun m_async;
+    ActionFun m_sync;
 
     std::atomic_bool m_done_async;
     std::atomic_bool m_done_sync;
@@ -22,11 +32,14 @@ private:
     void run_sync();
 
 public:
-    Action(const Action &old);
+    Action(ActionFun async, ActionFun sync);
 
-    Action(std::function<void()> async, std::function<void()> sync);
+    static ActionPtr new_action(ActionFun async, ActionFun sync)
+    {
+        return std::make_shared<Action>(async, sync);
+    }
 
-    bool try_async();
+    void do_async();
     bool try_sync();
 
     ~Action();

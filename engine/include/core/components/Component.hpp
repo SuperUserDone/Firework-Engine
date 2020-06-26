@@ -8,7 +8,9 @@ namespace FW
 namespace Core
 {
 
-class Component
+class Object;
+
+class Component : public std::enable_shared_from_this<Component>
 {
 protected:
     // Loading and related
@@ -17,6 +19,9 @@ protected:
     // Props
     bool m_is_static = false;
     bool m_changed = false;
+
+    // Parent
+    std::shared_ptr<Object> m_parent;
 
 public:
     Component();
@@ -28,7 +33,6 @@ public:
 
     // Checks
     virtual bool is_loaded() const;
-    virtual bool should_update() const = 0;
 
     // Rendering
     virtual void setup_render() = 0;
@@ -36,6 +40,9 @@ public:
 
     // Updating
     virtual void tick() const = 0;
+
+    // Parenting
+    virtual void set_parent(std::shared_ptr<Object> parent);
 
     ~Component();
 };

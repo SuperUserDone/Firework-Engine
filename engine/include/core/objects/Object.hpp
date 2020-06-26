@@ -12,7 +12,7 @@ namespace FW
 namespace Core
 {
 
-class Object
+class Object : public std::enable_shared_from_this<Object>
 {
 protected:
     // Components
@@ -31,17 +31,12 @@ protected:
 public:
     Object();
 
-    // Actions
-    virtual Action get_load_action() = 0;
-    virtual Action get_unload_action() = 0;
-    virtual Action get_update_action() = 0;
 
     // Components
     virtual void add_component(std::shared_ptr<Component> comp);
 
     // Checks
     virtual bool is_loaded() const;
-    virtual bool should_gpu_update() const = 0;
 
     // Rendering
     virtual void setup_render() = 0;
