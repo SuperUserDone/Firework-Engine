@@ -16,10 +16,14 @@ find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(ASSIMP REQUIRED assimp)
 
+set(SIMDJSON_JUST_LIBRARY ON CACHE STRING "Build just the library, nothing else." FORCE)
+add_subdirectory(simdjson EXCLUDE_FROM_ALL)
+
 include_directories(
     "${ASSIMP_INCLUDE_DIRS}"
     "engine/include"
     "glad/include"
+    "simdjson/include"
     "glm/"
 )
 

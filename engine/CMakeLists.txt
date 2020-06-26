@@ -19,6 +19,7 @@ set(FIREWORK_SOURCE
 
 set(FIREWORK_LIBRARIES
     glfw
+    simdjson
     ${ASSIMP_LIBRARIES}
     pthread
     dl
