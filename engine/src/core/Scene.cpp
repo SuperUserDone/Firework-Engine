@@ -24,6 +24,13 @@ void Scene::add_light(std::shared_ptr<ObjectLight> obj) {}
 
 /*******************************************************************************/
 
+void Scene::add_camera(std::shared_ptr<ObjectCamera> obj)
+{
+    m_cameras.push_back(obj);
+}
+
+/*******************************************************************************/
+
 void Scene::render_forward()
 {
     if (!m_cameras.empty())

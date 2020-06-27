@@ -28,8 +28,11 @@ int main()
     obj->add_component(mat);
     obj->add_component(mesh);
 
+    auto camera = std::make_shared<FW::Core::ObjectCamera>();
+
     FW::Core::Scene test_scene;
     test_scene.add_object(obj);
+    test_scene.add_camera(camera);
 
     while (!win.check_close())
     {

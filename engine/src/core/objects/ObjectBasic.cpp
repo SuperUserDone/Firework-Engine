@@ -30,9 +30,11 @@ void ObjectBasic::setup_render() {}
 
 void ObjectBasic::render_forward() const
 {
-    std::for_each(
-        std::begin(m_components), std::end(m_components),
-        [](std::shared_ptr<Component> comp) { comp->render_forward(); });
+    std::for_each(std::begin(m_components), std::end(m_components),
+                  [](std::shared_ptr<Component> comp) {
+                      comp->setup_render();
+                      comp->render_forward();
+                  });
 }
 
 /*******************************************************************************/

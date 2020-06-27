@@ -76,6 +76,10 @@ void ComponentMeshLoader::load_assets()
         }
 
         auto temp_comp = std::make_shared<ComponentMesh>(vertices, indices);
+
+        while (!m_parent)
+        {
+        }
         m_parent->add_component(temp_comp);
     }
     m_is_loaded = true;

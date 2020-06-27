@@ -89,6 +89,10 @@ void Shader::load_ogl()
 
     glDeleteShader(frag_shader);
     glDeleteShader(vert_shader);
+
+    uint camera_block_index = glGetUniformBlockIndex(m_program, "camera");
+
+    glUniformBlockBinding(m_program, camera_block_index, 0);
 }
 
 /*******************************************************************************/

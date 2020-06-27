@@ -62,7 +62,7 @@ bool Renderer::frame(Core::Scene &scene)
                 scene.render_ui();
                 break;
             case RENDERPASS_RESET:
-                glClear(GL_COLOR_BUFFER_BIT);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 break;
             }
         }
