@@ -1,0 +1,8 @@
+{
+    "material":
+    {
+        "name": "Test",
+        "vertex": "assets/materials/shaders/test.vertex.glsl",
+        "fragment": "assets/materials/shaders/test.fragment.glsl"
+    }
+}

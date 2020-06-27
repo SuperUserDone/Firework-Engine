@@ -31,7 +31,7 @@ public:
     virtual void render_forward() const;
 
     // Updating
-    virtual void tick() const;
+    virtual void tick();
 
     ~ComponentMeshLoader();
 };

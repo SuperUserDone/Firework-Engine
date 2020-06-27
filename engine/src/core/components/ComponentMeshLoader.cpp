@@ -29,7 +29,6 @@ void ComponentMeshLoader::load_assets()
         aiProcess_Triangulate |               //
             aiProcess_FlipUVs |               //
             aiProcess_JoinIdenticalVertices | //
-            aiProcess_OptimizeMeshes |        //
             aiProcess_GenNormals              //
     );
 
@@ -38,44 +37,47 @@ void ComponentMeshLoader::load_assets()
         return;
     }
 
-    aiMesh *Mesh1 = scene->mMeshes[0];
-
-    std::vector<Render::Vertex> vertices;
-
-    for (int i = 0; i < Mesh1->mNumVertices; i++)
+    for (int i = 0; i < scene->mNumMeshes; i++)
     {
-        Render::Vertex vert;
+        aiMesh *m_temp_mesh = scene->mMeshes[0];
 
-        vert.pos = {Mesh1->mVertices[i].x, //
-                    Mesh1->mVertices[i].y, //
-                    Mesh1->mVertices[i].z};
+        std::vector<Render::Vertex> vertices;
 
-        vert.normal = {Mesh1->mNormals[i].x, //
-                       Mesh1->mNormals[i].y, //
-                       Mesh1->mNormals[i].z};
-
-        if (Mesh1->mTextureCoords[0])
+        for (int i = 0; i < m_temp_mesh->mNumVertices; i++)
         {
-            vert.uv = {Mesh1->mTextureCoords[0][i].x, //
-                       Mesh1->mTextureCoords[0][i].y};
+            Render::Vertex vert;
+
+            vert.pos = {m_temp_mesh->mVertices[i].x, //
+                        m_temp_mesh->mVertices[i].y, //
+                        m_temp_mesh->mVertices[i].z};
+
+            vert.normal = {m_temp_mesh->mNormals[i].x, //
+                           m_temp_mesh->mNormals[i].y, //
+                           m_temp_mesh->mNormals[i].z};
+
+            if (m_temp_mesh->mTextureCoords[0])
+            {
+                vert.uv = {m_temp_mesh->mTextureCoords[0][i].x, //
+                           m_temp_mesh->mTextureCoords[0][i].y};
+            }
+            else
+                vert.uv = {0.0f, 0.0f};
+
+            vertices.push_back(vert);
         }
-        else
-            vert.uv = {0.0f, 0.0f};
 
-        vertices.push_back(vert);
+        std::vector<uint32_t> indices;
+
+        for (unsigned int i = 0; i < m_temp_mesh->mNumFaces; i++)
+        {
+            aiFace face = m_temp_mesh->mFaces[i];
+            for (unsigned int j = 0; j < face.mNumIndices; j++)
+                indices.push_back(face.mIndices[j]);
+        }
+
+        auto temp_comp = std::make_shared<ComponentMesh>(vertices, indices);
+        m_parent->add_component(temp_comp);
     }
-
-    std::vector<uint32_t> indices;
-
-    for (unsigned int i = 0; i < Mesh1->mNumFaces; i++)
-    {
-        aiFace face = Mesh1->mFaces[i];
-        for (unsigned int j = 0; j < face.mNumIndices; j++)
-            indices.push_back(face.mIndices[j]);
-    }
-
-    auto temp_comp = std::make_shared<ComponentMesh>(vertices, indices);
-    m_parent->add_component(temp_comp);
     m_is_loaded = true;
 }
 
@@ -97,7 +99,7 @@ void ComponentMeshLoader::render_forward() const {}
 
 /*******************************************************************************/
 
-void ComponentMeshLoader::tick() const {}
+void ComponentMeshLoader::tick() {}
 
 /*******************************************************************************/
 

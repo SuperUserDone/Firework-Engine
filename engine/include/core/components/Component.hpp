@@ -39,7 +39,7 @@ public:
     virtual void render_forward() const = 0;
 
     // Updating
-    virtual void tick() const = 0;
+    virtual void tick() = 0;
 
     // Parenting
     virtual void set_parent(std::shared_ptr<Object> parent);
