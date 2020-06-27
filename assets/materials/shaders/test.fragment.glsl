@@ -7,7 +7,7 @@ out vec4 FragColor;
 
 void main()
 {
-    vec3 light_pos = vec3(2.0f, -2.0f, 2.0f);
+    vec3 light_pos = vec3(0.0f, -2.0f, 2.0f);
     vec3 light_color = vec3(1.0f, 1.0f, 1.0f);
 
     vec3 normal = normalize(frag_normal);

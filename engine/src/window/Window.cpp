@@ -1,6 +1,7 @@
 #include <functional>
 #include <iostream>
 
+#include "window/RuntimeProperties.hpp"
 #include "window/Window.hpp"
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
@@ -117,6 +118,8 @@ void Window::make_window()
         glfwTerminate();
         exit(-1);
     }
+
+    glfwSetWindowSizeCallback(m_window, &RuntimeProperties::resize_callback);
 }
 
 /*******************************************************************************/
@@ -136,7 +139,8 @@ void Window::init_opengl()
     // glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     // glDebugMessageCallback(glDebugOutput, nullptr);
 
-    glViewport(0, 0, m_settings.width, m_settings.height);
+    RuntimeProperties::resize_callback(m_window, m_settings.width,
+                                       m_settings.height);
 }
 
 /*******************************************************************************/
@@ -150,7 +154,11 @@ Window::Window(const WindowSettings &settings) : m_settings(settings)
 
 /*******************************************************************************/
 
-void Window::poll_events() { glfwPollEvents(); }
+void Window::poll_events()
+{
+    RuntimeProperties::get_window_size(m_settings.width, m_settings.height);
+    glfwPollEvents();
+}
 
 /*******************************************************************************/
 

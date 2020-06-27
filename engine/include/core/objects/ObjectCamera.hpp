@@ -25,6 +25,9 @@ protected:
 
     uint m_camera_buffer;
 
+    int last_x = 0;
+    int last_y = 0;
+
 public:
     ObjectCamera();
 
@@ -32,7 +35,7 @@ public:
     virtual void load_assets();
     virtual void load_ogl();
     virtual void unload();
-    
+
     // Component
     virtual void add_component(std::shared_ptr<Component> comp);
 

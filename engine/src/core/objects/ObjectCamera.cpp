@@ -2,6 +2,7 @@
 
 #include "core/ActionQueue.hpp"
 #include "core/objects/ObjectCamera.hpp"
+#include "window/RuntimeProperties.hpp"
 
 namespace FW
 {
@@ -14,10 +15,15 @@ void ObjectCamera::load_assets() {}
 
 void ObjectCamera::load_ogl()
 {
+    int x, y;
+    Window::RuntimeProperties::get_window_size(x, y);
+    last_x = x;
+    last_y = y;
+
     m_projection =
-        glm::perspective(glm::radians(90.f), 800.f / 600.f, 0.1f, 100.f);
+        glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
     m_view = glm::lookAt(glm::vec3(0.0f, -2.0f, 0.0f), //
-                         glm::vec3(0.0f, 0.0f, 0.0f), //
+                         glm::vec3(0.0f, 0.0f, 0.0f),  //
                          glm::vec3(0.0f, 0.0f, 1.0f));
 
     glGenBuffers(1, &m_camera_buffer);
@@ -71,7 +77,29 @@ void ObjectCamera::add_component(std::shared_ptr<Component> comp) {}
 
 /*******************************************************************************/
 
-void ObjectCamera::setup_render() {}
+void ObjectCamera::setup_render()
+{
+    int x, y;
+    Window::RuntimeProperties::get_window_size(x, y);
+
+    m_projection =
+        glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
+
+    // Fill buffer
+    glBufferSubData(GL_UNIFORM_BUFFER, //
+                    0,                 //
+                    sizeof(glm::mat4), //
+                    glm::value_ptr(m_projection));
+
+    glBufferSubData(GL_UNIFORM_BUFFER, //
+                    sizeof(glm::mat4), //
+                    sizeof(glm::mat4), //
+                    glm::value_ptr(m_view));
+
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
 
 /*******************************************************************************/
 
