@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 
 #include "core/ActionQueue.hpp"
+#include "core/components/ComponentTransform.hpp"
 #include "core/objects/ObjectCamera.hpp"
 #include "window/RuntimeProperties.hpp"
 
@@ -22,9 +23,9 @@ void ObjectCamera::load_ogl()
 
     m_projection =
         glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
-    m_view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), //
-                         glm::vec3(0.0f, 0.0f, 0.0f),  //
-                         glm::vec3(0.0f, 0.0f, 1.0f));
+    m_transform->set_matrix(glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), //
+                                        glm::vec3(0.0f, 0.0f, 0.0f), //
+                                        glm::vec3(0.0f, 0.0f, 1.0f)));
 
     glGenBuffers(1, &m_camera_buffer);
 
@@ -53,7 +54,7 @@ void ObjectCamera::load_ogl()
     glBufferSubData(GL_UNIFORM_BUFFER, //
                     sizeof(glm::mat4), //
                     sizeof(glm::mat4), //
-                    glm::value_ptr(m_view));
+                    glm::value_ptr(m_transform->get_matrix()));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
@@ -69,6 +70,9 @@ ObjectCamera::ObjectCamera()
     ActionQueue::get_instance().add_top_action(
         Action::new_action(std::bind(&ObjectCamera::load_assets, this),
                            std::bind(&ObjectCamera::load_ogl, this)));
+
+    m_transform = std::make_shared<ComponentTransform>();
+    m_components.push_back(m_transform);
 }
 
 /*******************************************************************************/
@@ -96,7 +100,7 @@ void ObjectCamera::setup_render()
     glBufferSubData(GL_UNIFORM_BUFFER, //
                     sizeof(glm::mat4), //
                     sizeof(glm::mat4), //
-                    glm::value_ptr(m_view));
+                    glm::value_ptr(m_transform->get_matrix()));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

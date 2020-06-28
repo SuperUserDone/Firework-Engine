@@ -10,6 +10,7 @@
 
 #include "core/Action.hpp"
 #include "core/components/Component.hpp"
+#include "core/components/ComponentTransform.hpp"
 #include "core/objects/Object.hpp"
 
 namespace FW
@@ -20,10 +21,11 @@ namespace Core
 class ObjectCamera : public Object
 {
 protected:
-    glm::mat4 m_view;
     glm::mat4 m_projection;
 
     uint m_camera_buffer;
+
+    std::shared_ptr<ComponentTransform> m_transform;
 
     int last_x = 0;
     int last_y = 0;

@@ -5,7 +5,7 @@ namespace FW
 namespace Core
 {
 
-glm::mat4 ComponentTransform::build_matrix()
+glm::mat4 ComponentTransform::build_matrix() const
 {
     glm::mat4 matrix = glm::identity<glm::mat4>();
 
@@ -53,6 +53,15 @@ void ComponentTransform::set_rot(const glm::vec3 &rot)
 
 /*******************************************************************************/
 
+void ComponentTransform::set_matrix(const glm::mat4 &mat)
+{
+    glm::vec3 skew;
+    glm::vec4 perspective;
+    glm::decompose(mat, m_scale, m_rot, m_pos, skew, perspective);
+}
+
+/*******************************************************************************/
+
 void ComponentTransform::set_scale(const glm::vec3 &scale) { m_scale = scale; }
 
 /*******************************************************************************/
@@ -76,28 +85,38 @@ void ComponentTransform::scale(const glm::vec3 &scale) { m_scale *= scale; }
 
 /*******************************************************************************/
 
-glm::vec3 ComponentTransform::get_pos() const {}
+glm::vec3 ComponentTransform::get_pos() const { return m_pos; }
 
 /*******************************************************************************/
 
-glm::vec3 ComponentTransform::get_rot() const {}
+glm::vec3 ComponentTransform::get_rot() const
+{
+    return glm::eulerAngles(m_rot);
+}
 
 /*******************************************************************************/
 
-glm::quat ComponentTransform::get_rot_quat() const {}
+glm::quat ComponentTransform::get_rot_quat() const { return m_rot; }
 
 /*******************************************************************************/
 
-glm::vec3 ComponentTransform::get_scale() const {}
+glm::vec3 ComponentTransform::get_scale() const { return m_scale; }
+
+/*******************************************************************************/
+
+glm::mat4 ComponentTransform::get_matrix() const { return build_matrix(); }
 
 /*******************************************************************************/
 
 void ComponentTransform::setup_render()
 {
-    glm::mat4 mat = build_matrix();
-    glm::mat3 mat_normal(glm::transpose(glm::inverse(mat)));
-    glUniformMatrix4fv(10, 1, GL_FALSE, glm::value_ptr(mat));
-    glUniformMatrix3fv(11, 1, GL_FALSE, glm::value_ptr(mat_normal));
+    if (m_update)
+    {
+        glm::mat4 mat = build_matrix();
+        glm::mat3 mat_normal(glm::transpose(glm::inverse(mat)));
+        glUniformMatrix4fv(10, 1, GL_FALSE, glm::value_ptr(mat));
+        glUniformMatrix3fv(11, 1, GL_FALSE, glm::value_ptr(mat_normal));
+    }
 }
 
 /*******************************************************************************/
