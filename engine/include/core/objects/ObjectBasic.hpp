@@ -28,6 +28,11 @@ public:
     virtual void setup_render();
     virtual void render_forward() const;
 
+    // Components
+    virtual ComponentPtrVector &get_components();
+    virtual ComponentPtrVector &get_components_type(ComponentType type);
+    virtual int get_component_count();
+
     // Updating
     virtual void tick();
 

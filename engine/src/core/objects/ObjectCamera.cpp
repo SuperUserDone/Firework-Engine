@@ -22,7 +22,7 @@ void ObjectCamera::load_ogl()
 
     m_projection =
         glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
-    m_view = glm::lookAt(glm::vec3(0.0f, -2.0f, 0.0f), //
+    m_view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), //
                          glm::vec3(0.0f, 0.0f, 0.0f),  //
                          glm::vec3(0.0f, 0.0f, 1.0f));
 

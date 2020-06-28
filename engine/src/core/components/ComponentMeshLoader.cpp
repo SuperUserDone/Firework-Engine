@@ -28,8 +28,7 @@ void ComponentMeshLoader::load_assets()
         m_path,                               //
         aiProcess_Triangulate |               //
             aiProcess_FlipUVs |               //
-            aiProcess_JoinIdenticalVertices | //
-            aiProcess_GenNormals              //
+            aiProcess_JoinIdenticalVertices   //
     );
 
     if (!scene)

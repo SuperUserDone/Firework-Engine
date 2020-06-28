@@ -16,7 +16,7 @@ class Object : public std::enable_shared_from_this<Object>
 {
 protected:
     // Components
-    std::vector<std::shared_ptr<Component>> m_components;
+    ComponentPtrVector m_components;
 
     // Loading and related
     std::atomic_bool m_loaded;
@@ -31,9 +31,8 @@ protected:
 public:
     Object();
 
-
     // Components
-    virtual void add_component(std::shared_ptr<Component> comp);
+    virtual void add_component(ComponentPtr comp);
 
     // Checks
     virtual bool is_loaded() const;

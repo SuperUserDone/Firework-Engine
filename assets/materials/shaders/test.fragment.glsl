@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 in vec3 frag_pos;
 in vec3 frag_normal;
 in vec2 frag_uv;
@@ -7,7 +7,7 @@ out vec4 FragColor;
 
 void main()
 {
-    vec3 light_pos = vec3(0.0f, -2.0f, 2.0f);
+    vec3 light_pos = vec3(2.0f, 2.0f, 2.0f);
     vec3 light_color = vec3(1.0f, 1.0f, 1.0f);
 
     vec3 normal = normalize(frag_normal);

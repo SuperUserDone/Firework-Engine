@@ -4,6 +4,7 @@
 #include <core/components/ComponentMaterial.hpp>
 #include <core/components/ComponentMesh.hpp>
 #include <core/components/ComponentMeshLoader.hpp>
+#include <core/components/ComponentTransform.hpp>
 #include <render/Material.hpp>
 #include <render/Renderer.hpp>
 #include <window/Window.hpp>
@@ -21,11 +22,14 @@ int main()
 
     auto obj = std::make_shared<FW::Core::ObjectBasic>();
     auto mesh = std::make_shared<FW::Core::ComponentMeshLoader>(
-        "./assets/models/monkey.fbx");
+        "./assets/models/cube.obj");
     auto mat = std::make_shared<FW::Core::ComponentMaterial>(
         "assets/materials/testmat.json");
 
+    auto trans = std::make_shared<FW::Core::ComponentTransform>();
+
     obj->add_component(mat);
+    obj->add_component(trans);
     obj->add_component(mesh);
 
     auto camera = std::make_shared<FW::Core::ObjectCamera>();
@@ -38,6 +42,7 @@ int main()
     {
         if (renderer.smart_frame(test_scene))
         {
+            trans->rotate(glm::vec3(0, 0, glm::radians(0.1f)));
             win.swap_buffers();
         }
         win.poll_events();

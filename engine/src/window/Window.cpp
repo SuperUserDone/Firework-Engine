@@ -135,6 +135,7 @@ void Window::init_opengl()
     }
 
     glEnable(GL_DEPTH_TEST);
+    glCullFace(GL_CULL_FACE);
     // glEnable(GL_DEBUG_OUTPUT);
     // glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     // glDebugMessageCallback(glDebugOutput, nullptr);

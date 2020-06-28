@@ -9,7 +9,7 @@ Object::Object() {}
 
 /*******************************************************************************/
 
-void Object::add_component(std::shared_ptr<Component> comp)
+void Object::add_component(ComponentPtr comp)
 {
     comp->set_parent(shared_from_this());
     m_components.push_back(comp);

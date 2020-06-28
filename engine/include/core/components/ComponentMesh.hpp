@@ -27,6 +27,8 @@ public:
     virtual void load_ogl();
     virtual void update_data();
 
+    virtual ComponentType get_type() { return COMPONENT_MESH; }
+
     // Rendering
     virtual void setup_render();
     virtual void render_forward() const;

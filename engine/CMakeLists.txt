@@ -7,6 +7,7 @@ set(FIREWORK_SOURCE
 "src/core/components/ComponentMaterial.cpp"
 "src/core/components/ComponentMesh.cpp"
 "src/core/components/ComponentMeshLoader.cpp"
+"src/core/components/ComponentTransform.cpp"
 "src/core/objects/Object.cpp"
 "src/core/objects/ObjectCamera.cpp"
 "src/core/objects/ObjectLight.cpp"

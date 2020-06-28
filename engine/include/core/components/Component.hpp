@@ -2,6 +2,9 @@
 
 #include <atomic>
 #include <memory>
+#include <vector>
+
+#include "core/components/ComponentTypes.hpp"
 
 namespace FW
 {
@@ -9,6 +12,9 @@ namespace Core
 {
 
 class Object;
+class Component;
+typedef std::shared_ptr<Component> ComponentPtr;
+typedef std::vector<ComponentPtr> ComponentPtrVector;
 
 class Component : public std::enable_shared_from_this<Component>
 {
@@ -33,6 +39,7 @@ public:
 
     // Checks
     virtual bool is_loaded() const;
+    virtual ComponentType get_type() = 0;
 
     // Rendering
     virtual void setup_render() = 0;
