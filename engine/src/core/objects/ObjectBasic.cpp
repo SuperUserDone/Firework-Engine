@@ -24,29 +24,6 @@ ObjectBasic::ObjectBasic() {}
 
 /*******************************************************************************/
 
-ComponentPtrVector &ObjectBasic::get_components() { return m_components; }
-
-/*******************************************************************************/
-
-ComponentPtrVector &ObjectBasic::get_components_type(ComponentType type)
-{
-    ComponentPtrVector temp;
-
-    for (auto &&comp : m_components)
-    {
-        if (comp->get_type() == type)
-            temp.push_back(comp);
-    }
-
-    return temp;
-}
-
-/*******************************************************************************/
-
-int ObjectBasic::get_component_count() { return m_components.size(); }
-
-/*******************************************************************************/
-
 void ObjectBasic::setup_render() {}
 
 /*******************************************************************************/

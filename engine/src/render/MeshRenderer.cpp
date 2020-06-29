@@ -5,11 +5,7 @@ namespace FW
 namespace Render
 {
 
-MeshRenderer::MeshRenderer(const std::vector<Vertex> &data,
-                           std::vector<uint32_t> &indices)
-    : m_data(data), m_indices(indices)
-{
-}
+MeshRenderer::MeshRenderer(Core::MeshPtr mesh) : m_mesh(mesh) {}
 
 /*******************************************************************************/
 
@@ -31,12 +27,13 @@ void MeshRenderer::load_ogl()
 
     // Load Vertex data
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_data.size(), &m_data[0],
-                 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_mesh->get_data().size(),
+                 &m_mesh->get_data()[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(uint32_t),
-                 &m_indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                 m_mesh->get_indices().size() * sizeof(uint32_t),
+                 &m_mesh->get_indices()[0], GL_STATIC_DRAW);
 
     // Attributes
     glEnableVertexAttribArray(0);
@@ -72,7 +69,8 @@ void MeshRenderer::render_forward() const
     // Arrays
     glBindVertexArray(VAO);
     // Draw
-    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_mesh->get_indices().size(), GL_UNSIGNED_INT,
+                   0);
 }
 
 /*******************************************************************************/

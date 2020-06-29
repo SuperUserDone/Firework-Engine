@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 
+#include "core/mesh/Mesh.hpp"
 #include "render/Types.hpp"
 
 namespace FW
@@ -25,16 +26,14 @@ private:
     std::atomic_bool m_is_loaded;
     std::atomic_bool m_changed;
 
-    std::vector<Vertex> m_data;
-    std::vector<uint32_t> m_indices;
+    Core::MeshPtr m_mesh;
 
     uint VBO;
     uint VAO;
     uint EBO;
 
 public:
-    MeshRenderer(const std::vector<Vertex> &data,
-                 std::vector<uint32_t> &indices);
+    MeshRenderer(Core::MeshPtr mesh);
 
     void update(const std::vector<Vertex> &data, int mode = MODE_FULL,
                 int begin = 0, int end = 0, bool re_alloc = false);

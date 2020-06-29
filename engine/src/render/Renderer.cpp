@@ -20,7 +20,7 @@ void Renderer::add_pipeline_step(RenderPass pass)
 
 /*******************************************************************************/
 
-bool Renderer::smart_frame(Core::Scene &scene)
+bool Renderer::smart_frame(Core::ScenePtr &scene)
 {
     // Updates
     // ! Q PROCESSING
@@ -36,7 +36,7 @@ bool Renderer::smart_frame(Core::Scene &scene)
 
 /*******************************************************************************/
 
-bool Renderer::frame(Core::Scene &scene)
+bool Renderer::frame(Core::ScenePtr &scene)
 {
     bool return_val = false;
 
@@ -53,13 +53,13 @@ bool Renderer::frame(Core::Scene &scene)
             switch (pass)
             {
             case RENDERPASS_FORWARD:
-                scene.render_forward();
+                scene->render_forward();
                 break;
             case RENDERPASS_POST_PROCESS:
-                scene.render_postprocess();
+                scene->render_postprocess();
                 break;
             case RENDERPASS_UI:
-                scene.render_ui();
+                scene->render_ui();
                 break;
             case RENDERPASS_RESET:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

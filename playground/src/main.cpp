@@ -34,9 +34,9 @@ int main()
 
     auto camera = std::make_shared<FW::Core::ObjectCamera>();
 
-    FW::Core::Scene test_scene;
-    test_scene.add_object(obj);
-    test_scene.add_camera(camera);
+    FW::Core::ScenePtr test_scene = std::make_shared<FW::Core::Scene>();
+    test_scene->add_object(obj);
+    test_scene->add_camera(camera);
 
     while (!win.check_close())
     {

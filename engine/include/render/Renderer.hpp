@@ -65,8 +65,8 @@ public:
     void add_pipeline_step(RenderPass pass);
 
     // Rendering
-    bool smart_frame(Core::Scene &scene);
-    bool frame(Core::Scene &scene);
+    bool smart_frame(Core::ScenePtr &scene);
+    bool frame(Core::ScenePtr &scene);
 
     ~Renderer();
 };

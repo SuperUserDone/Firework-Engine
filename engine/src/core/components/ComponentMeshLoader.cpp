@@ -74,7 +74,8 @@ void ComponentMeshLoader::load_assets()
                 indices.push_back(face.mIndices[j]);
         }
 
-        auto temp_comp = std::make_shared<ComponentMesh>(vertices, indices);
+        auto temp_comp = std::make_shared<ComponentMesh>(
+            std::make_shared<Mesh>(vertices, indices));
 
         while (!m_parent)
         {

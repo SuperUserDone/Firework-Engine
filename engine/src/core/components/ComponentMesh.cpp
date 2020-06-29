@@ -7,9 +7,7 @@ namespace Core
 
 /*******************************************************************************/
 
-ComponentMesh::ComponentMesh(std::vector<Render::Vertex> &data,
-                             std::vector<uint32_t> &indices)
-    : m_renderer(data, indices)
+ComponentMesh::ComponentMesh(MeshPtr mesh) : m_renderer(mesh)
 {
     ActionQueue::get_instance().add_top_action(
         Action::new_action(std::bind(&ComponentMesh::load_assets, this),

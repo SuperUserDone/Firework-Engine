@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include "core/Action.hpp"
@@ -14,10 +15,13 @@ namespace FW
 namespace Core
 {
 
+class Scene;
+
+typedef std::shared_ptr<Scene> ScenePtr;
+
 class Scene
 {
 private:
-
     // Objects
     std::vector<std::shared_ptr<ObjectBasic>> m_objects;
     std::vector<std::shared_ptr<ObjectLight>> m_lights;

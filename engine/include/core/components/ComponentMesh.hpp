@@ -19,8 +19,7 @@ protected:
     Render::MeshRenderer m_renderer;
 
 public:
-    ComponentMesh(std::vector<Render::Vertex> &data,
-                  std::vector<uint32_t> &indices);
+    ComponentMesh(MeshPtr mesh);
 
     // Loading
     virtual void load_assets();

@@ -12,6 +12,10 @@ namespace FW
 namespace Core
 {
 
+class Object;
+
+typedef std::shared_ptr<Object> ObjectPtr;
+
 class Object : public std::enable_shared_from_this<Object>
 {
 protected:
@@ -33,6 +37,9 @@ public:
 
     // Components
     virtual void add_component(ComponentPtr comp);
+    virtual ComponentPtrVector &get_components();
+    virtual ComponentPtrVector &get_components_type(ComponentType type);
+    virtual int get_component_count();
 
     // Checks
     virtual bool is_loaded() const;
