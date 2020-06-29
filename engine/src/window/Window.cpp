@@ -1,6 +1,8 @@
 #include <functional>
 #include <iostream>
 
+#include <Tracy.hpp>
+
 #include "window/RuntimeProperties.hpp"
 #include "window/Window.hpp"
 
@@ -94,12 +96,17 @@ namespace FW
 namespace Window
 {
 
-void Window::init_glfw() { glfwInit(); }
+void Window::init_glfw()
+{
+    ZoneScopedN("GLFW init");
+    glfwInit();
+}
 
 /*******************************************************************************/
 
 void Window::make_window()
 {
+    ZoneScopedN("Window Creation");
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
@@ -126,6 +133,7 @@ void Window::make_window()
 
 void Window::init_opengl()
 {
+    ZoneScopedN("Opengl init");
     glfwMakeContextCurrent(m_window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -148,6 +156,7 @@ void Window::init_opengl()
 
 Window::Window(const WindowSettings &settings) : m_settings(settings)
 {
+    ZoneScopedN("Window init");
     init_glfw();
     make_window();
     init_opengl();
@@ -157,13 +166,18 @@ Window::Window(const WindowSettings &settings) : m_settings(settings)
 
 void Window::poll_events()
 {
+    ZoneScopedN("Event Polling");
     RuntimeProperties::get_window_size(m_settings.width, m_settings.height);
     glfwPollEvents();
 }
 
 /*******************************************************************************/
 
-void Window::swap_buffers() { glfwSwapBuffers(m_window); }
+void Window::swap_buffers()
+{
+    ZoneScopedN("Buffer Swap");
+    glfwSwapBuffers(m_window);
+}
 
 /*******************************************************************************/
 

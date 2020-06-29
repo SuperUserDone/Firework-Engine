@@ -1,5 +1,7 @@
 #include "core/Action.hpp"
 
+#include <Tracy.hpp>
+
 namespace FW
 {
 namespace Core
@@ -13,6 +15,7 @@ Action::Action(std::function<void()> async, std::function<void()> sync)
 
 void Action::run_async()
 {
+    ZoneScopedN("Async action");
     m_async();
     m_done_async = true;
 }
@@ -21,6 +24,7 @@ void Action::run_async()
 
 void Action::run_sync()
 {
+    ZoneScopedN("Sync action");
     m_sync();
     m_done_sync = true;
 }
@@ -29,7 +33,8 @@ void Action::run_sync()
 
 void Action::do_async()
 {
-    if(!m_done_async)
+    ZoneScopedN("Action Async attempt");
+    if (!m_done_async)
         run_async();
 }
 
@@ -37,6 +42,7 @@ void Action::do_async()
 
 bool Action::try_sync()
 {
+    ZoneScopedN("Action Sync attempt");
     if (!m_done_async)
         return false;
 

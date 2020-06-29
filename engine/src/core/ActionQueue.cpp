@@ -1,5 +1,6 @@
 #include "core/ActionQueue.hpp"
 
+#include <Tracy.hpp>
 namespace FW
 {
 namespace Core
@@ -34,6 +35,7 @@ void ActionQueue::add_top_action(ActionPtr action)
 
 void ActionQueue::digest_sync_low(int count, int max)
 {
+    ZoneScopedN("Low prio sync digest");
     std::unique_lock<std::mutex> lock(m_low_lock);
     digest(m_low_prio, count, max);
 }
@@ -42,6 +44,7 @@ void ActionQueue::digest_sync_low(int count, int max)
 
 void ActionQueue::digest_sync_med(int count, int max)
 {
+    ZoneScopedN("Low prio sync digest");
     std::unique_lock<std::mutex> lock(m_med_lock);
     digest(m_med_prio, count, max);
 }
@@ -50,6 +53,7 @@ void ActionQueue::digest_sync_med(int count, int max)
 
 void ActionQueue::digest_sync_top(int count, int max)
 {
+    ZoneScopedN("Low prio sync digest");
     std::unique_lock<std::mutex> lock(m_top_lock);
     digest(m_top_prio, count, max);
 }

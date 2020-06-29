@@ -27,6 +27,7 @@ set(FIREWORK_LIBRARIES
     glfw
     simdjson
     ${ASSIMP_LIBRARIES}
+    tracy
     pthread
     dl
 )

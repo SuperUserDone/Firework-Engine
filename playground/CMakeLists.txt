@@ -4,6 +4,7 @@ set(PLAYGROUND_SOURCE
 
 set(PLAYGROUND_LIBRARIES
     "FireworkEngine"
+    tracy
 )
 
 add_executable(Playground ${PLAYGROUND_SOURCE})

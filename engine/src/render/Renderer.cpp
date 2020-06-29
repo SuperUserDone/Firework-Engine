@@ -2,6 +2,7 @@
 
 #include "core/ActionQueue.hpp"
 
+#include <Tracy.hpp>
 #include <glad/glad.h>
 
 namespace FW
@@ -22,6 +23,8 @@ void Renderer::add_pipeline_step(RenderPass pass)
 
 bool Renderer::smart_frame(Core::ScenePtr &scene)
 {
+    ZoneScopedN("Renderer Smart Frame");
+
     // Updates
     // ! Q PROCESSING
     Core::ActionQueue &queue = Core::ActionQueue::get_instance();
@@ -38,14 +41,18 @@ bool Renderer::smart_frame(Core::ScenePtr &scene)
 
 bool Renderer::frame(Core::ScenePtr &scene)
 {
+    ZoneScopedN("Renderer Frame");
     bool return_val = false;
 
     // Clock things
+    bool do_anyways = false;
+    if (m_fps_target == 0)
+        do_anyways = true;
     std::chrono::nanoseconds interval = ns_cast(1s) / m_fps_target;
     auto now = Clock::now();
 
     // Check if frame must be renderered
-    if (m_last_frame + interval < now)
+    if (m_last_frame + interval < now || do_anyways)
     {
         // Render Passes
         for (auto pass : m_render_pipeline)
@@ -76,6 +83,7 @@ bool Renderer::frame(Core::ScenePtr &scene)
 
         // Set frame clock
         m_last_frame = Clock::now();
+        FrameMark("Frame");
     }
 
     // Update fps counter
@@ -94,6 +102,7 @@ bool Renderer::frame(Core::ScenePtr &scene)
             m_min_fps = m_fps;
 
         m_last_fps_update = Clock::now();
+        TracyPlot("FPS", (int64_t)m_fps);
     }
     return return_val;
 }
