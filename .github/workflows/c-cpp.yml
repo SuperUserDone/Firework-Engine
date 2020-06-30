@@ -12,11 +12,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 'Run CMake with Ninja'
-      uses: lukka/run-cmake@v2
-      with:
-        cmakeListsOrSettingsJson: CMakeListsTxt
-        cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
-        useVcpkgToolchainFile: true
-        buildDirectory: '${{ runner.workspace }}/build/'
-        cmakeAppendedArgs: '-GNinja '
+    - name: Build CMake
+      uses: ashutoshvarma/action-cmake-build@v1
