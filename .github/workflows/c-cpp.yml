@@ -15,7 +15,7 @@ jobs:
     - name: 'Run CMake with Ninja'
       uses: lukka/run-cmake@v2
       with:
-        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsOrSettingsJson: CMakeListsTxt
         cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
         useVcpkgToolchainFile: true
         buildDirectory: '${{ runner.workspace }}/build/'
