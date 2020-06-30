@@ -13,11 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: cmake-configure
-      uses: snickerbockers/cmake-configure@prerel1
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+    - name: install-cmake
+      uses: Symbitic/install-cmake@v0.1.0
+    - name: cmake
+    - run: cmake .
+    - name: build
+      run: ninja 
