@@ -14,12 +14,14 @@ set(FIREWORK_SOURCE
 "src/core/objects/ObjectLight.cpp"
 "src/core/objects/ObjectBasic.cpp"
 "src/io/binary/BinaryBuffer.cpp"
+"src/render/CubeMap.cpp"
 "src/render/Framebuffer.cpp"
 "src/render/Material.cpp"
 "src/render/MeshRenderer.cpp"
 "src/render/Renderer.cpp"
 "src/render/RenderPass.cpp"
 "src/render/Shader.cpp"
+"src/render/Texture.cpp"
 "src/window/Window.cpp"
 )
 

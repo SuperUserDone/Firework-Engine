@@ -1,0 +1,7 @@
+{
+    "skybox": {
+        "colour": "assets/materials/textures/skybox/skybox.png",
+        "radience": "assets/materials/textures/skybox/rad_[6].png",
+        "irradiance": "assets/materials/textures/skybox/irr.png"
+    }
+}

@@ -14,7 +14,6 @@ public:
     AssetBundle();
 
     MeshPtr get_mesh(const std::string &name);
-    Blue
 
     ~AssetBundle();
 };

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "render/Shader.hpp"
+#include "render/Texture.hpp"
 
 namespace FW
 {
@@ -17,6 +18,11 @@ private:
     std::atomic_bool m_loaded;
 
     Shader m_shader;
+
+    TexturePtr m_albedo;
+    TexturePtr m_normal;
+    TexturePtr m_metalic;
+    TexturePtr m_roughness;
 
 public:
     Material(const std::string &mat_path);

@@ -59,9 +59,7 @@ private:
 public:
     Renderer();
 
-    // Pipeline stuff    std::mutex m_lock_async1;
-    std::mutex m_lock_async2;
-    std::mutex m_lock_async3;
+    // Pipeline stuff
     void add_pipeline_step(RenderPass pass);
 
     // Rendering

@@ -25,7 +25,7 @@ void ObjectCamera::load_ogl()
         glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
 
     m_transform->set_matrix(
-        glm::inverse(glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), //
+        glm::inverse(glm::lookAt(glm::vec3(1.0f, 1.0f, 0.0f), //
                                  glm::vec3(0.0f, 0.0f, 0.0f), //
                                  glm::vec3(0.0f, 0.0f, 1.0f))));
 
@@ -33,9 +33,9 @@ void ObjectCamera::load_ogl()
 
     glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
 
-    glBufferData(GL_UNIFORM_BUFFER,     //
-                 2 * sizeof(glm::mat4), //
-                 nullptr,               //
+    glBufferData(GL_UNIFORM_BUFFER,                         //
+                 2 * sizeof(glm::mat4) + sizeof(glm::vec3), //
+                 nullptr,                                   //
                  GL_STATIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -43,7 +43,7 @@ void ObjectCamera::load_ogl()
     glBindBufferRange(GL_UNIFORM_BUFFER, //
                       0,                 //
                       m_camera_buffer,   //
-                      0, 2 * sizeof(glm::mat4));
+                      0, 2 * sizeof(glm::mat4) + sizeof(glm::vec3));
 
     glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
 
@@ -57,6 +57,11 @@ void ObjectCamera::load_ogl()
                     sizeof(glm::mat4), //
                     sizeof(glm::mat4), //
                     glm::value_ptr(glm::inverse(m_transform->get_matrix())));
+
+    glBufferSubData(GL_UNIFORM_BUFFER,     //
+                    2 * sizeof(glm::mat4), //
+                    sizeof(glm::vec3),     //
+                    glm::value_ptr(m_transform->get_pos()));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
@@ -76,6 +81,16 @@ ObjectCamera::ObjectCamera()
     m_transform = std::make_shared<ComponentTransform>();
     m_transform->set_external_updates(true);
     m_components.push_back(m_transform);
+}
+
+/*******************************************************************************/
+
+void ObjectCamera::look_at(const glm::vec3 &target)
+{
+    m_transform->set_matrix(
+        glm::inverse(glm::lookAt(m_transform->get_pos(), //
+                                 target,                 //
+                                 glm::vec3(0.0f, 0.0f, 1.0f))));
 }
 
 /*******************************************************************************/
@@ -104,6 +119,11 @@ void ObjectCamera::setup_render()
                     sizeof(glm::mat4), //
                     sizeof(glm::mat4), //
                     glm::value_ptr(glm::inverse(m_transform->get_matrix())));
+
+    glBufferSubData(GL_UNIFORM_BUFFER,     //
+                    2 * sizeof(glm::mat4), //
+                    sizeof(glm::vec3),     //
+                    glm::value_ptr(m_transform->get_pos()));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

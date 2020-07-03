@@ -28,7 +28,8 @@ void ComponentMeshLoader::load_assets()
         m_path,                               //
         aiProcess_Triangulate |               //
             aiProcess_FlipUVs |               //
-            aiProcess_JoinIdenticalVertices   //
+            aiProcess_JoinIdenticalVertices | //
+            aiProcess_CalcTangentSpace        //
     );
 
     if (!scene)
@@ -53,6 +54,14 @@ void ComponentMeshLoader::load_assets()
             vert.normal = {m_temp_mesh->mNormals[i].x, //
                            m_temp_mesh->mNormals[i].y, //
                            m_temp_mesh->mNormals[i].z};
+
+            vert.tangent = {m_temp_mesh->mTangents[i].x, //
+                            m_temp_mesh->mTangents[i].y, //
+                            m_temp_mesh->mTangents[i].z};
+
+            vert.bitangent = {m_temp_mesh->mBitangents[i].x, //
+                              m_temp_mesh->mBitangents[i].y, //
+                              m_temp_mesh->mBitangents[i].z};
 
             if (m_temp_mesh->mTextureCoords[0])
             {

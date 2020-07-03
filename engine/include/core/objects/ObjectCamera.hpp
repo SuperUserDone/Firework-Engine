@@ -38,6 +38,9 @@ public:
     virtual void load_ogl();
     virtual void unload();
 
+    // Special transforms
+    virtual void look_at(const glm::vec3 &target);
+
     // Component
     virtual void add_component(std::shared_ptr<Component> comp);
 

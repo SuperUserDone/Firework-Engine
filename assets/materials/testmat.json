@@ -1,8 +1,13 @@
 {
-    "material":
-    {
+    "material": {
         "name": "Test",
         "vertex": "assets/materials/shaders/test.vertex.glsl",
-        "fragment": "assets/materials/shaders/test.fragment.glsl"
+        "fragment": "assets/materials/shaders/test.fragment.glsl",
+        "textures": {
+            "albedo": "assets/materials/textures/test-albedo.png",
+            "normal": "assets/materials/textures/test-normal.png",
+            "metalic": "assets/materials/textures/test-metallic.png",
+            "roughness": "assets/materials/textures/test-roughness.png"
+        }
     }
 }

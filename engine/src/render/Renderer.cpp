@@ -23,8 +23,6 @@ void Renderer::add_pipeline_step(RenderPass pass)
 
 bool Renderer::smart_frame(Core::ScenePtr &scene)
 {
-    ZoneScopedN("Renderer Smart Frame");
-
     // Updates
     // ! Q PROCESSING
     Core::ActionQueue &queue = Core::ActionQueue::get_instance();
@@ -41,7 +39,6 @@ bool Renderer::smart_frame(Core::ScenePtr &scene)
 
 bool Renderer::frame(Core::ScenePtr &scene)
 {
-    ZoneScopedN("Renderer Frame");
     bool return_val = false;
 
     // Clock things

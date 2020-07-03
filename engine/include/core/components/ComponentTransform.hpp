@@ -20,6 +20,9 @@ namespace FW
 namespace Core
 {
 
+class ComponentTransform;
+typedef std::shared_ptr<ComponentTransform> ComponentTransformPtr;
+
 class ComponentTransform : public Component
 {
 protected:

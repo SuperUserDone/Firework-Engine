@@ -16,7 +16,8 @@ Action::Action(std::function<void()> async, std::function<void()> sync)
 void Action::run_async()
 {
     ZoneScopedN("Async action");
-    m_async();
+    if (m_async)
+        m_async();
     m_done_async = true;
 }
 
@@ -25,7 +26,8 @@ void Action::run_async()
 void Action::run_sync()
 {
     ZoneScopedN("Sync action");
-    m_sync();
+    if (m_sync)
+        m_sync();
     m_done_sync = true;
 }
 
