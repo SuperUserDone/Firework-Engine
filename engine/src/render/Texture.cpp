@@ -3,6 +3,7 @@
 #include "stb_image.h"
 
 #include <glad/glad.h>
+#include <loguru.hpp>
 
 namespace FW
 {
@@ -27,8 +28,14 @@ void Texture::set_load_params(const std::string &path) {}
 
 void Texture::async_safe_load()
 {
+    LOG_F(INFO, "Loading Texture: %s", m_path.c_str());
     uint8_t *data =
         stbi_load(m_path.c_str(), &m_width, &m_height, &m_channels, 0);
+
+    if (!data)
+    {
+        LOG_F(ERROR, "Failed to load texture %s!", m_path.c_str());
+    }
 
     m_data = std::vector<uint8_t>(data, data + m_width * m_height * m_channels);
     stbi_image_free(data);

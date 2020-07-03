@@ -1,5 +1,6 @@
 set(FIREWORK_SOURCE
 "../glad/src/glad.c"
+"../loguru/loguru.cpp"
 "src/core/Scene.cpp"
 "src/core/Action.cpp"
 "src/core/ActionQueue.cpp"

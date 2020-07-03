@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include <glad/glad.h>
+#include <loguru.hpp>
 
 #include "render/Shader.hpp"
 
@@ -53,8 +54,7 @@ void Shader::load_ogl()
     {
         char infoLog[512];
         glGetShaderInfoLog(vert_shader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-                  << infoLog << std::endl;
+        LOG_F(INFO, "Failed to compile vertex shader: %s", infoLog);
     }
 
     uint frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -68,8 +68,7 @@ void Shader::load_ogl()
     {
         char infoLog[512];
         glGetShaderInfoLog(frag_shader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-                  << infoLog << std::endl;
+        LOG_F(INFO, "Failed to compile fragment shader: %s", infoLog);
     }
 
     m_program = glCreateProgram();
@@ -83,7 +82,7 @@ void Shader::load_ogl()
     {
         char infoLog[512];
         glGetProgramInfoLog(m_program, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::LINKING_FAILED\n" << infoLog << std::endl;
+        LOG_F(INFO, "Failed to compile link shader program: %s", infoLog);
     }
     glUseProgram(m_program);
 

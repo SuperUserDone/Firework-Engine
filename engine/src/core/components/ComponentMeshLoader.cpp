@@ -1,6 +1,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <loguru.hpp>
 
 #include "core/components/ComponentMesh.hpp"
 #include "core/components/ComponentMeshLoader.hpp"
@@ -22,6 +23,7 @@ ComponentMeshLoader::ComponentMeshLoader(const std::string &path) : m_path(path)
 
 void ComponentMeshLoader::load_assets()
 {
+    LOG_F(INFO, "Importing model %s", m_path.c_str());
     Assimp::Importer importer;
 
     const aiScene *scene = importer.ReadFile( //
@@ -34,12 +36,14 @@ void ComponentMeshLoader::load_assets()
 
     if (!scene)
     {
+        LOG_F(ERROR, "Failed to open model %s / unsupported format",
+              m_path.c_str());
         return;
     }
 
     for (int i = 0; i < scene->mNumMeshes; i++)
     {
-        aiMesh *m_temp_mesh = scene->mMeshes[0];
+        aiMesh *m_temp_mesh = scene->mMeshes[i];
 
         std::vector<Render::Vertex> vertices;
 

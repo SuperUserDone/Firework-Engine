@@ -1,5 +1,6 @@
 #include "render/CubeMap.hpp"
 
+#include <loguru.hpp>
 #include <stb_image.h>
 
 namespace FW
@@ -39,8 +40,15 @@ void CubeMap::async_safe_load()
         if (end_num != 0)
             modded_path.replace(pos_start, pos_end + 1 - pos_start,
                                 std::to_string(i));
+
+        LOG_F(INFO, "Loading Cubemap: %s", modded_path.c_str());
         uint8_t *data =
             stbi_load(modded_path.c_str(), &m_width, &m_height, &m_channels, 0);
+
+        if (!data)
+        {
+            LOG_F(ERROR, "Failed to load Cubemap %s!", modded_path.c_str());
+        }
 
         m_data.push_back(
             std::vector<uint8_t>(data, data + m_width * m_height * m_channels));
@@ -87,11 +95,16 @@ void CubeMap::bind(int slot)
 
 /*******************************************************************************/
 
-void CubeMap::unload() {}
+void CubeMap::unload()
+{
+    m_loaded = false;
+    glDeleteTextures(1, &m_texture);
+    m_data.clear();
+}
 
 /*******************************************************************************/
 
-CubeMap::~CubeMap() {}
+CubeMap::~CubeMap() { glDeleteTextures(1, &m_texture); }
 
 } // namespace Render
 } // namespace FW

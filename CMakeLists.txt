@@ -27,6 +27,7 @@ include_directories(
     "simdjson/include"
     "glm/"
     "tracy/"
+    "loguru/"
 )
 
 if(${FIREWORK_TRACY_PROFILER})
