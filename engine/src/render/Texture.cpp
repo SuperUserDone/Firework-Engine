@@ -67,14 +67,18 @@ void Texture::sync_only_load()
     }
 
     glGenerateMipmap(GL_TEXTURE_2D);
+    m_loaded = true;
 }
 
 /*******************************************************************************/
 
 void Texture::bind(int slot)
 {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, m_texture);
+    if (m_loaded)
+    {
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, m_texture);
+    }
 }
 
 /*******************************************************************************/

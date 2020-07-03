@@ -36,7 +36,7 @@ void ObjectCamera::load_ogl()
     glBufferData(GL_UNIFORM_BUFFER,                         //
                  2 * sizeof(glm::mat4) + sizeof(glm::vec3), //
                  nullptr,                                   //
-                 GL_STATIC_DRAW);
+                 GL_STREAM_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     // Set buffer pos
@@ -64,6 +64,7 @@ void ObjectCamera::load_ogl()
                     glm::value_ptr(m_transform->get_pos()));
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    m_ready = true;
 }
 
 /*******************************************************************************/
@@ -74,6 +75,7 @@ void ObjectCamera::unload() {}
 
 ObjectCamera::ObjectCamera()
 {
+    m_ready = false;
     ActionQueue::get_instance().add_top_action(
         Action::new_action(std::bind(&ObjectCamera::load_assets, this),
                            std::bind(&ObjectCamera::load_ogl, this)));
@@ -107,6 +109,8 @@ void ObjectCamera::setup_render()
     m_projection =
         glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
 
+    if (!m_ready)
+        return;
     glBindBuffer(GL_UNIFORM_BUFFER, m_camera_buffer);
 
     // Fill buffer

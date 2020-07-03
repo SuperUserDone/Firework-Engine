@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <memory>
 #include <string>
 
@@ -28,6 +29,8 @@ private:
     int m_channels;
 
     std::vector<uint8_t> m_data;
+
+    std::atomic_bool m_loaded;
 
 public:
     Texture();

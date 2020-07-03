@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <atomic>
 #include <string>
 #include <vector>
 
@@ -24,6 +25,8 @@ private:
     int m_depth;
 
     std::vector<std::vector<uint8_t>> m_data;
+
+    std::atomic_bool m_loaded;
 
 public:
     CubeMap();

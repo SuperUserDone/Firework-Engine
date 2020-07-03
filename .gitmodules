@@ -7,3 +7,6 @@
 [submodule "tracy"]
 	path = tracy
 	url = https://github.com/wolfpld/tracy.git
+[submodule "loguru"]
+	path = loguru
+	url = https://github.com/emilk/loguru.git

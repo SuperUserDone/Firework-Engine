@@ -11,7 +11,7 @@ out vec2 frag_uv;
 out vec3 frag_campos;
 out mat3 frag_tangent_basis;
 
-layout(std140) uniform Matrices
+layout(std140) uniform camera
 {
     mat4 projection;
     mat4 view;
