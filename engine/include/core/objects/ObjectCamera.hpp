@@ -36,9 +36,9 @@ public:
     ObjectCamera();
 
     // Loading
-    virtual void load_assets();
-    virtual void load_ogl();
-    virtual void unload();
+    virtual void load_assets() override;
+    virtual void load_ogl() override;
+    virtual void unload() override;
 
     // Special transforms
     virtual void look_at(const glm::vec3 &target);
@@ -47,11 +47,11 @@ public:
     virtual void add_component(std::shared_ptr<Component> comp);
 
     // Rendering
-    virtual void setup_render();
-    virtual void render_forward() const;
+    virtual void setup_render() override;
+    virtual void render_forward() const override;
 
     // Updating
-    virtual void tick();
+    virtual void tick() override;
 
     ~ObjectCamera();
 };

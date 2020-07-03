@@ -16,22 +16,22 @@ namespace Core
 class ObjectBasic : public Object
 {
 protected:
-    // Loading
-    virtual void load_assets();
-    virtual void load_ogl();
-    virtual void unload();
-
 public:
     ObjectBasic();
 
+    // Loading
+    virtual void load_assets() override;
+    virtual void load_ogl() override;
+    virtual void unload() override;
+
     // Rendering
-    virtual void setup_render();
-    virtual void render_forward() const;
+    virtual void setup_render() override;
+    virtual void render_forward() const override;
 
     // Components
 
     // Updating
-    virtual void tick();
+    virtual void tick() override;
 
     ~ObjectBasic();
 };

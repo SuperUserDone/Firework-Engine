@@ -16,20 +16,20 @@ namespace Core
 class ObjectLight : public Object
 {
 protected:
-    // Loading
-    virtual void load_assets();
-    virtual void load_ogl();
-    virtual void unload();
-
 public:
     ObjectLight();
 
+    // Loading
+    virtual void load_assets() override;
+    virtual void load_ogl() override;
+    virtual void unload() override;
+
     // Rendering
-    virtual void setup_render();
-    virtual void render_forward() const;
+    virtual void setup_render() override;
+    virtual void render_forward() const override;
 
     // Updating
-    virtual void tick();
+    virtual void tick() override;
 
     ~ObjectLight();
 };

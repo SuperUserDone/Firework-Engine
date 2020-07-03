@@ -9,9 +9,10 @@ namespace Core
 
 ComponentMesh::ComponentMesh(MeshPtr mesh) : m_renderer(mesh)
 {
-    ActionQueue::get_instance().add_top_action(
-        Action::new_action(std::bind(&ComponentMesh::load_assets, this),
-                           std::bind(&ComponentMesh::load_ogl, this)));
+    ActionQueue::get_instance().add_top_action(Action::new_action( //
+        [this]() { this->load_assets(); },                            //
+        [this]() { this->load_ogl(); }));
+
     m_is_loaded = false;
 }
 

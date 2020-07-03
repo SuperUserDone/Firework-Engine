@@ -39,20 +39,22 @@ void Material::load_assets()
         std::string(mat["textures"]["roughness"].get_string().value()));
 
     queue.add_med_action(Core::ActionPtr(new Core::Action( //
-        std::bind(&Texture::async_safe_load, m_albedo.get()),
-        std::bind(&Texture::sync_only_load, m_albedo.get()))));
+        [this]() { this->m_albedo->async_safe_load(); },   //
+        [this]() { this->m_albedo->sync_only_load(); })));
+        
+    queue.add_med_action(Core::ActionPtr(new Core::Action( //
+        [this]() { this->m_normal->async_safe_load(); },   //
+        [this]() { this->m_normal->sync_only_load(); })));
 
     queue.add_med_action(Core::ActionPtr(new Core::Action( //
-        std::bind(&Texture::async_safe_load, m_normal.get()),
-        std::bind(&Texture::sync_only_load, m_normal.get()))));
+        [this]() { this->m_metalic->async_safe_load(); },   //
+        [this]() { this->m_metalic->sync_only_load(); })));
 
     queue.add_med_action(Core::ActionPtr(new Core::Action( //
-        std::bind(&Texture::async_safe_load, m_metalic.get()),
-        std::bind(&Texture::sync_only_load, m_metalic.get()))));
+        [this]() { this->m_roughness->async_safe_load(); },   //
+        [this]() { this->m_roughness->sync_only_load(); })));
 
-    queue.add_med_action(Core::ActionPtr(new Core::Action(
-        std::bind(&Texture::async_safe_load, m_roughness.get()),
-        std::bind(&Texture::sync_only_load, m_roughness.get()))));
+
 }
 
 /*******************************************************************************/

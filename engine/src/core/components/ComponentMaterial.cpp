@@ -8,9 +8,10 @@ namespace Core
 
 ComponentMaterial::ComponentMaterial(const std::string &path) : m_mat(path)
 {
-    ActionQueue::get_instance().add_top_action(
-        Action::new_action(std::bind(&ComponentMaterial::load_assets, this),
-                           std::bind(&ComponentMaterial::load_ogl, this)));
+    ActionQueue::get_instance().add_top_action(Action::new_action( //
+        [this]() { this->load_assets(); },                            //
+        [this]() { this->load_ogl(); }));
+    
     m_is_loaded = false;
 }
 

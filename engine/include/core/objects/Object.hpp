@@ -27,14 +27,15 @@ protected:
     bool m_is_static = false;
     bool m_changed = false;
 
-    // Lodading and related
-    virtual void load_assets() = 0;
-    virtual void load_ogl() = 0;
-    virtual void unload() = 0;
 
 public:
     Object();
 
+    // Lodading and related
+    virtual void load_assets() = 0;
+    virtual void load_ogl() = 0;
+    virtual void unload() = 0;
+    
     // Components
     virtual void add_component(ComponentPtr comp);
     virtual ComponentPtrVector &get_components();

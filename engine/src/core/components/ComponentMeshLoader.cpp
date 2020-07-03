@@ -14,9 +14,9 @@ namespace Core
 
 ComponentMeshLoader::ComponentMeshLoader(const std::string &path) : m_path(path)
 {
-    ActionQueue::get_instance().add_top_action(
-        Action::new_action(std::bind(&ComponentMeshLoader::load_assets, this),
-                           std::bind(&ComponentMeshLoader::load_ogl, this)));
+    ActionQueue::get_instance().add_top_action(Action::new_action( //
+        [this]() { this->load_assets(); },                            //
+        [this]() { this->load_ogl(); }));
 }
 
 /*******************************************************************************/

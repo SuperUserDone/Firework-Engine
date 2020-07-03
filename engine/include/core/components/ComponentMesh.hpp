@@ -22,18 +22,18 @@ public:
     ComponentMesh(MeshPtr mesh);
 
     // Loading
-    virtual void load_assets();
-    virtual void load_ogl();
-    virtual void update_data();
+    virtual void load_assets() override;
+    virtual void load_ogl() override;
+    virtual void update_data() override;
 
-    virtual ComponentType get_type() { return COMPONENT_MESH; }
+    virtual ComponentType get_type() override { return COMPONENT_MESH; }
 
     // Rendering
-    virtual void setup_render();
-    virtual void render_forward() const;
+    virtual void setup_render() override;
+    virtual void render_forward() const override;
 
     // Updating
-    virtual void tick();
+    virtual void tick() override;
 
     ~ComponentMesh();
 };

@@ -38,12 +38,12 @@ public:
     ComponentTransform();
 
     // Loading
-    virtual void load_assets();
-    virtual void load_ogl();
-    virtual void update_data();
+    virtual void load_assets() override;
+    virtual void load_ogl() override;
+    virtual void update_data() override;
 
     // Checks
-    virtual ComponentType get_type() { return COMPONENT_TRANSFORM; }
+    virtual ComponentType get_type() override { return COMPONENT_TRANSFORM; }
 
     // Internal
     virtual void set_external_updates(bool state) { m_update = !state; }
@@ -67,8 +67,8 @@ public:
     virtual glm::mat4 get_matrix() const;
 
     // Rendering
-    virtual void setup_render();
-    virtual void render_forward() const;
+    virtual void setup_render() override;
+    virtual void render_forward() const override;
 
     // Updating
     virtual void tick();

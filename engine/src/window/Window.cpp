@@ -12,7 +12,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
                             const char *message, const void *userParam)
 {
     // ignore non-significant error/warning codes
-    if (id == 131169 || id == 131185 || id == 131218 || id == 131204)
+    if (id == 131169 || id == 131185 || id == 131218 || id == 131204 || id == 1)
         return;
 
     int status;
@@ -33,7 +33,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
         break;
     }
 
-    VLOG_SCOPE_F(status, "OpenGL: %d %s", message);
+    VLOG_SCOPE_F(status, "OpenGL: %d %s", id, message);
 
     switch (source)
     {
