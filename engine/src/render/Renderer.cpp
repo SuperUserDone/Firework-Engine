@@ -59,15 +59,23 @@ bool Renderer::frame(Core::ScenePtr &scene)
             switch (pass)
             {
             case RENDERPASS_FORWARD:
-                scene->render_forward();
+                scene->render_forward(m_forward_buffer->get_handle());
+                m_last_buffer = m_forward_buffer;
                 break;
             case RENDERPASS_POST_PROCESS:
-                scene->render_postprocess();
+                m_last_buffer->bind_texture(0);
+                scene->render_postprocess(m_postprocess_buffer->get_handle());
+                m_last_buffer = m_postprocess_buffer;
                 break;
             case RENDERPASS_UI:
-                scene->render_ui();
+                scene->render_ui(m_last_buffer->get_handle());
                 break;
             case RENDERPASS_RESET:
+                glBindFramebuffer(GL_FRAMEBUFFER,
+                                  m_postprocess_buffer->get_handle());
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                glBindFramebuffer(GL_FRAMEBUFFER,
+                                  m_forward_buffer->get_handle());
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 break;
             }

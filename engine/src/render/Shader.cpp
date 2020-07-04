@@ -91,7 +91,8 @@ void Shader::load_ogl()
 
     uint camera_block_index = glGetUniformBlockIndex(m_program, "camera");
 
-    glUniformBlockBinding(m_program, camera_block_index, 0);
+    if (camera_block_index != 4294967295)
+        glUniformBlockBinding(m_program, camera_block_index, 0);
 }
 
 /*******************************************************************************/

@@ -146,6 +146,8 @@ void Window::init_opengl()
     }
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_MULTISAMPLE);
     glCullFace(GL_BACK);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glEnable(GL_DEBUG_OUTPUT);
@@ -205,7 +207,15 @@ bool Window::check_close() { return glfwWindowShouldClose(m_window); }
 
 /*******************************************************************************/
 
-Window::~Window() { glfwTerminate(); }
+Window::~Window()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(m_window);
+    glfwTerminate();
+}
 
 } // namespace Window
 } // namespace FW

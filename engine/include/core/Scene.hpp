@@ -9,6 +9,7 @@
 #include "core/objects/ObjectBasic.hpp"
 #include "core/objects/ObjectCamera.hpp"
 #include "core/objects/ObjectLight.hpp"
+#include "render/Shader.hpp"
 #include "ui/UIIncludes.hpp"
 
 namespace FW
@@ -34,6 +35,13 @@ private:
     // UI and related
     std::vector<std::function<void()>> m_ui_functions;
 
+    std::atomic_bool m_postprocess_loaded;
+
+    uint m_quad_buffer;
+    uint m_quad_vao;
+
+    Render::Shader m_postprocess_shader;
+
 public:
     Scene();
 
@@ -46,9 +54,10 @@ public:
     void add_camera(std::shared_ptr<ObjectCamera> obj);
 
     // Rendering functions
-    void render_forward();
-    void render_postprocess();
-    void render_ui();
+    void render_forward(uint framebuffer);
+    void render_postprocess(uint framebuffer);
+    void render_ui(uint framebuffer);
+    void setup_postprocess();
 
     ~Scene();
 };

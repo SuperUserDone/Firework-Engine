@@ -30,8 +30,8 @@ struct TextureConfig
     TextureWrapMode wrap_s = WRAPMODE_REPEAT;
     TextureWrapMode wrap_t = WRAPMODE_REPEAT;
 
-    TextureFilter filter_mag = FILTER_NEAREST;
-    TextureFilter filter_min = FILTER_NEAREST_MIPMAP_NEAREST;
+    TextureFilter filter_mag = FILTER_LINEAR;
+    TextureFilter filter_min = FILTER_LINEAR_MIPMAP_LINEAR;
 };
 
 } // namespace Render

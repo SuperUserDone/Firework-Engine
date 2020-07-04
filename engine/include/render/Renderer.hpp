@@ -56,8 +56,16 @@ private:
     double m_hard_timer;
     double m_soft_timer;
 
+    FramebufferPtr m_forward_buffer;
+    FramebufferPtr m_postprocess_buffer;
+    FramebufferPtr m_last_buffer;
+
 public:
     Renderer();
+
+    void set_forward_buffer(FramebufferPtr b) { m_forward_buffer = b; }
+    void set_postprocess_buffer(FramebufferPtr b) { m_postprocess_buffer = b; }
+    void set_last_buffer();
 
     // Pipeline stuff
     void add_pipeline_step(RenderPass pass);

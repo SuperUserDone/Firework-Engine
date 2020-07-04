@@ -7,6 +7,7 @@
 #include <core/components/ComponentMeshLoader.hpp>
 #include <core/components/ComponentTransform.hpp>
 #include <render/CubeMap.hpp>
+#include <render/Framebuffer.hpp>
 #include <render/Material.hpp>
 #include <render/Renderer.hpp>
 #include <window/Window.hpp>
@@ -21,7 +22,14 @@ int main()
     FW::Render::Renderer renderer;
     renderer.add_pipeline_step(FW::Render::RENDERPASS_RESET);
     renderer.add_pipeline_step(FW::Render::RENDERPASS_FORWARD);
+    renderer.add_pipeline_step(FW::Render::RENDERPASS_POST_PROCESS);
     renderer.add_pipeline_step(FW::Render::RENDERPASS_UI);
+
+    renderer.set_forward_buffer(std::make_shared<FW::Render::Framebuffer>(
+        settings.width, settings.height, true, 8));
+
+    renderer.set_postprocess_buffer(
+        std::make_shared<FW::Render::Framebuffer>(0));
 
     auto obj = std::make_shared<FW::Core::ObjectBasic>();
     auto mesh = std::make_shared<FW::Core::ComponentMeshLoader>(
