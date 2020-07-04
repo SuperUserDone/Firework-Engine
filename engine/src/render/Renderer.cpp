@@ -1,6 +1,7 @@
 #include "render/Renderer.hpp"
 
 #include "core/ActionQueue.hpp"
+#include "core/TimeHelpers.hpp"
 #include "ui/UIIncludes.hpp"
 
 #include <Tracy.hpp>
@@ -11,7 +12,7 @@ namespace FW
 namespace Render
 {
 
-Renderer::Renderer() { m_hard_timer = m_soft_timer = Clock::now(); }
+Renderer::Renderer() { m_hard_timer = m_soft_timer = Core::get_time(); }
 
 /*******************************************************************************/
 
@@ -46,10 +47,9 @@ bool Renderer::frame(Core::ScenePtr &scene)
     bool do_anyways = false;
     if (m_fps_target == 0)
         do_anyways = true;
-    std::chrono::nanoseconds interval = ns_cast(1s) / m_fps_target;
-    auto now = Clock::now();
+    double interval = 1.0 / m_fps_target;
+    double now = Core::get_time();
 
-    // Check if frame must be renderered
     if (m_last_frame + interval < now || do_anyways)
     {
         ZoneScopedN("Frame");
@@ -81,14 +81,15 @@ bool Renderer::frame(Core::ScenePtr &scene)
         m_delta_frame_count++;
 
         // Set frame clock
-        m_last_frame = Clock::now();
+        m_last_frame = now;
         FrameMark("Frame");
     }
 
     // Update fps counter
     if (m_last_fps_update + m_fps_update_interval < now)
     {
-        m_fps = m_delta_frame_count * (1000 / m_fps_update_interval.count());
+        double now = Core::get_time();
+        m_fps = m_delta_frame_count;
         m_delta_frame_count = 0;
 
         if (m_min_fps <= 1)
@@ -100,7 +101,7 @@ bool Renderer::frame(Core::ScenePtr &scene)
         if (m_fps < m_max_fps)
             m_min_fps = m_fps;
 
-        m_last_fps_update = Clock::now();
+        m_last_fps_update = now;
         TracyPlot("FPS", (int64_t)m_fps);
     }
     return return_val;

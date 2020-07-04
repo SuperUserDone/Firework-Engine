@@ -46,15 +46,15 @@ private:
     uint32_t m_delta_frame_count = 0;
 
     // Update intervals
-    std::chrono::milliseconds m_fps_update_interval = 1s;
+    double m_fps_update_interval = 1;
 
     // Past events
-    std::chrono::time_point<Clock> m_last_fps_update;
-    std::chrono::time_point<Clock> m_last_frame;
+    double m_last_fps_update;
+    double m_last_frame;
 
     // Timers
-    std::chrono::time_point<Clock> m_hard_timer;
-    std::chrono::time_point<Clock> m_soft_timer;
+    double m_hard_timer;
+    double m_soft_timer;
 
 public:
     Renderer();
