@@ -9,6 +9,7 @@
 #include "core/objects/ObjectBasic.hpp"
 #include "core/objects/ObjectCamera.hpp"
 #include "core/objects/ObjectLight.hpp"
+#include "ui/UIIncludes.hpp"
 
 namespace FW
 {
@@ -30,8 +31,14 @@ private:
     // Internal Updating
     void update_lamps();
 
+    // UI and related
+    std::vector<std::function<void()>> m_ui_functions;
+
 public:
     Scene();
+
+    // UI and related
+    void add_ui_element(const std::function<void()> &func);
 
     // Add functions
     void add_object(std::shared_ptr<ObjectBasic> obj);

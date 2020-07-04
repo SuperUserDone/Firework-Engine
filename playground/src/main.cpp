@@ -21,6 +21,7 @@ int main()
     FW::Render::Renderer renderer;
     renderer.add_pipeline_step(FW::Render::RENDERPASS_RESET);
     renderer.add_pipeline_step(FW::Render::RENDERPASS_FORWARD);
+    renderer.add_pipeline_step(FW::Render::RENDERPASS_UI);
 
     auto obj = std::make_shared<FW::Core::ObjectBasic>();
     auto mesh = std::make_shared<FW::Core::ComponentMeshLoader>(
@@ -57,6 +58,26 @@ int main()
 
     auto cam_trans = std::dynamic_pointer_cast<FW::Core::ComponentTransform>(
         camera->get_components()[0]);
+
+    test_scene->add_ui_element([cam_trans, camera]() {
+        glm::vec3 pos = cam_trans->get_pos();
+        glm::vec3 rot = cam_trans->get_rot();
+
+        static glm::vec3 lookat_target(0, 0, 0);
+        static bool camera_lookat = false;
+
+        ImGui::Begin("Camera");
+        ImGui::InputFloat3("Position", &pos[0], 4);
+        ImGui::InputFloat3("Rotation", &rot[0], 4);
+        ImGui::Checkbox("Camera target", &camera_lookat);
+        ImGui::InputFloat3("Target", &lookat_target[0], 4);
+        ImGui::End();
+
+        cam_trans->set_pos(pos);
+        cam_trans->set_rot(rot);
+        if (camera_lookat)
+            camera->look_at(lookat_target);
+    });
 
     while (!win.check_close())
     {

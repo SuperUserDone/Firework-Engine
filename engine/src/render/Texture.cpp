@@ -2,6 +2,7 @@
 #include "render/Texture.hpp"
 #include "stb_image.h"
 
+#include <Tracy.hpp>
 #include <glad/glad.h>
 #include <loguru.hpp>
 
@@ -28,6 +29,7 @@ void Texture::set_load_params(const std::string &path) {}
 
 void Texture::async_safe_load()
 {
+    ZoneScopedN("Load Texture");
     LOG_F(INFO, "Loading Texture: %s", m_path.c_str());
     uint8_t *data =
         stbi_load(m_path.c_str(), &m_width, &m_height, &m_channels, 0);
@@ -45,6 +47,7 @@ void Texture::async_safe_load()
 
 void Texture::sync_only_load()
 {
+    ZoneScopedN("Load Texture into Vram");
     glGenTextures(1, &m_texture);
     glBindTexture(GL_TEXTURE_2D, m_texture);
 

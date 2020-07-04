@@ -13,6 +13,13 @@ Scene::Scene() {}
 
 /*******************************************************************************/
 
+void Scene::add_ui_element(const std::function<void()> &func)
+{
+    m_ui_functions.push_back(func);
+}
+
+/*******************************************************************************/
+
 void Scene::add_object(std::shared_ptr<ObjectBasic> obj)
 {
     m_objects.push_back(obj);
@@ -59,7 +66,21 @@ void Scene::render_postprocess() {}
 
 /*******************************************************************************/
 
-void Scene::render_ui() {}
+void Scene::render_ui()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    for (auto &&draw_func : m_ui_functions)
+    {
+        draw_func();
+    }
+
+    ImGui::EndFrame();
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
 
 /*******************************************************************************/
 

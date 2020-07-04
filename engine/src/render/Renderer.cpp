@@ -1,6 +1,7 @@
 #include "render/Renderer.hpp"
 
 #include "core/ActionQueue.hpp"
+#include "ui/UIIncludes.hpp"
 
 #include <Tracy.hpp>
 #include <glad/glad.h>
@@ -51,6 +52,7 @@ bool Renderer::frame(Core::ScenePtr &scene)
     // Check if frame must be renderered
     if (m_last_frame + interval < now || do_anyways)
     {
+        ZoneScopedN("Frame");
         // Render Passes
         for (auto pass : m_render_pipeline)
         {

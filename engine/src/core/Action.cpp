@@ -9,6 +9,8 @@ namespace Core
 Action::Action(std::function<void()> async, std::function<void()> sync)
     : m_async(async), m_sync(sync)
 {
+    m_done_async = false;
+    m_done_sync = false;
 }
 
 /*******************************************************************************/

@@ -28,11 +28,15 @@ include_directories(
     "glm/"
     "tracy/"
     "loguru/"
+    "imgui/"
+    "imgui/examples"
 )
 
 if(${FIREWORK_TRACY_PROFILER})
 add_definitions(-DTRACY_ENABLE)
 endif()
+
+add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 add_library(tracy SHARED "tracy/TracyClient.cpp")
 

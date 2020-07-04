@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "ui/UIIncludes.hpp"
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -40,6 +42,7 @@ private:
     void init_glfw();
     void make_window();
     void init_opengl();
+    void init_imgui();
 
 public:
     Window(const WindowSettings &settings);

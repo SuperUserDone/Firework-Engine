@@ -1,6 +1,7 @@
 set(FIREWORK_SOURCE
 "../glad/src/glad.c"
 "../loguru/loguru.cpp"
+
 "src/core/Scene.cpp"
 "src/core/Action.cpp"
 "src/core/ActionQueue.cpp"
@@ -23,6 +24,7 @@ set(FIREWORK_SOURCE
 "src/render/RenderPass.cpp"
 "src/render/Shader.cpp"
 "src/render/Texture.cpp"
+"src/ui/UIIncludes.cpp"
 "src/window/Window.cpp"
 )
 

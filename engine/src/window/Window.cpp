@@ -156,6 +156,20 @@ void Window::init_opengl()
                                        m_settings.height);
 }
 
+void Window::init_imgui()
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init("#version 430 core");
+}
+
 /*******************************************************************************/
 
 Window::Window(const WindowSettings &settings) : m_settings(settings)
@@ -165,13 +179,14 @@ Window::Window(const WindowSettings &settings) : m_settings(settings)
     init_glfw();
     make_window();
     init_opengl();
+    init_imgui();
 }
 
 /*******************************************************************************/
 
 void Window::poll_events()
 {
-    ZoneScopedN("Event Polling");
+    // ZoneScopedN("Event Polling");
     RuntimeProperties::get_window_size(m_settings.width, m_settings.height);
     glfwPollEvents();
 }
