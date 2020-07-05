@@ -74,10 +74,34 @@ int main()
         if (renderer.smart_frame(test_scene))
         {
             if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_D))
-                trans->rotate(glm::vec3(0, 0, glm::radians(0.03f)));
+                cam_trans->rotate(glm::vec3(0, 0, glm::radians(-1.5f)));
 
             if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_A))
-                trans->rotate(glm::vec3(0, 0, glm::radians(-0.03f)));
+                cam_trans->rotate(glm::vec3(0, 0, glm::radians(1.5f)));
+
+            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_W))
+            {
+                glm::vec3 rot = cam_trans->get_rot();
+                glm::vec3 direction;
+
+                direction.y = cos(rot.z);
+                direction.x = -sin(rot.z);
+                direction.z = 0;
+
+                cam_trans->translate(direction * glm::vec3(0.03));
+            }
+
+            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_S))
+            {
+                glm::vec3 rot = cam_trans->get_rot();
+                glm::vec3 direction;
+
+                direction.y = cos(rot.z);
+                direction.x = -sin(rot.z);
+                direction.z = 0;
+
+                cam_trans->translate(direction * glm::vec3(-0.03));
+            }
 
             win.swap_buffers();
         }

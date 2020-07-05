@@ -108,14 +108,11 @@ void ObjectCamera::setup_render()
     x = Input::InputWindow::get_window_width();
     y = Input::InputWindow::get_window_height();
 
-    if (x == last_x && y == last_y)
-        return;
+    m_projection =
+        glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
 
     last_x = x;
     last_y = y;
-
-    m_projection =
-        glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
 
     if (!m_ready)
         return;
