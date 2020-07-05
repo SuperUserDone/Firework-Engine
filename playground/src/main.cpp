@@ -6,6 +6,7 @@
 #include <core/components/ComponentMesh.hpp>
 #include <core/components/ComponentMeshLoader.hpp>
 #include <core/components/ComponentTransform.hpp>
+#include <input/InputKeyboard.hpp>
 #include <render/CubeMap.hpp>
 #include <render/Framebuffer.hpp>
 #include <render/Material.hpp>
@@ -24,6 +25,7 @@ int main()
     renderer.add_pipeline_step(FW::Render::RENDERPASS_FORWARD);
     renderer.add_pipeline_step(FW::Render::RENDERPASS_POST_PROCESS);
     renderer.add_pipeline_step(FW::Render::RENDERPASS_UI);
+    renderer.add_pipeline_step(FW::Render::RENDERPASS_DONE);
 
     renderer.set_forward_buffer(std::make_shared<FW::Render::Framebuffer>(
         settings.width, settings.height, true, 8));
@@ -67,31 +69,16 @@ int main()
     auto cam_trans = std::dynamic_pointer_cast<FW::Core::ComponentTransform>(
         camera->get_components()[0]);
 
-    test_scene->add_ui_element([cam_trans, camera]() {
-        glm::vec3 pos = cam_trans->get_pos();
-        glm::vec3 rot = cam_trans->get_rot();
-
-        static glm::vec3 lookat_target(0, 0, 0);
-        static bool camera_lookat = false;
-
-        ImGui::Begin("Camera");
-        ImGui::InputFloat3("Position", &pos[0], 4);
-        ImGui::InputFloat3("Rotation", &rot[0], 4);
-        ImGui::Checkbox("Camera target", &camera_lookat);
-        ImGui::InputFloat3("Target", &lookat_target[0], 4);
-        ImGui::End();
-
-        cam_trans->set_pos(pos);
-        cam_trans->set_rot(rot);
-        if (camera_lookat)
-            camera->look_at(lookat_target);
-    });
-
     while (!win.check_close())
     {
         if (renderer.smart_frame(test_scene))
         {
-            trans->rotate(glm::vec3(0, 0, glm::radians(0.03f)));
+            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_D))
+                trans->rotate(glm::vec3(0, 0, glm::radians(0.03f)));
+
+            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_A))
+                trans->rotate(glm::vec3(0, 0, glm::radians(-0.03f)));
+
             win.swap_buffers();
         }
         win.poll_events();

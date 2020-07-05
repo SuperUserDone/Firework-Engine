@@ -10,7 +10,7 @@
 #include "core/objects/ObjectCamera.hpp"
 #include "core/objects/ObjectLight.hpp"
 #include "render/Shader.hpp"
-#include "ui/UIIncludes.hpp"
+#include "ui/ImguiData.hpp"
 
 namespace FW
 {

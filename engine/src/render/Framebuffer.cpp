@@ -1,5 +1,5 @@
 #include "render/Framebuffer.hpp"
-#include "window/RuntimeProperties.hpp"
+#include "input/InputWindow.hpp"
 
 namespace FW
 {
@@ -140,10 +140,26 @@ void Framebuffer::bind_texture(uint slot)
 
 /*******************************************************************************/
 
+uint Framebuffer::get_texture()
+{
+    if (m_multisampled)
+    {
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, m_multisample_buffer);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_framebuffer);
+        glBlitFramebuffer(0, 0, m_width, m_height, 0, 0, m_width, m_height,
+                          GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    }
+
+    return m_texture;
+}
+
+/*******************************************************************************/
+
 uint Framebuffer::get_handle()
 {
     int x, y;
-    Window::RuntimeProperties::get_window_size(x, y);
+    x = Input::InputWindow::get_window_width();
+    y = Input::InputWindow::get_window_height();
     if ((x != m_width || y != m_height) && custom)
     {
         resize(x, y);

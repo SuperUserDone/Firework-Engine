@@ -4,8 +4,10 @@
 #include <Tracy.hpp>
 #include <loguru.hpp>
 
-#include "window/RuntimeProperties.hpp"
 #include "window/Window.hpp"
+
+#include "input/InputKeyboard.hpp"
+#include "input/InputWindow.hpp"
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
                             GLenum severity, GLsizei length,
@@ -127,7 +129,15 @@ void Window::make_window()
         exit(-1);
     }
 
-    glfwSetWindowSizeCallback(m_window, &RuntimeProperties::resize_callback);
+    Input::InputWindow::init(m_settings.width, m_settings.height);
+    Input::InputWindow::set_resize_provider(Input::WINDOW_SOURCE_GLFW);
+
+    Input::InputKeyboard::set_window(m_window);
+
+    glfwSetWindowSizeCallback(m_window,
+                              &Input::InputWindow::glfw_resize_callback);
+    glfwSetKeyCallback(m_window, &Input::InputKeyboard::key_callback);
+    glfwSetCharCallback(m_window, &Input::InputKeyboard::character_callback);
 }
 
 /*******************************************************************************/
@@ -153,9 +163,6 @@ void Window::init_opengl()
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(glDebugOutput, nullptr);
-
-    RuntimeProperties::resize_callback(m_window, m_settings.width,
-                                       m_settings.height);
 }
 
 void Window::init_imgui()
@@ -189,7 +196,6 @@ Window::Window(const WindowSettings &settings) : m_settings(settings)
 void Window::poll_events()
 {
     // ZoneScopedN("Event Polling");
-    RuntimeProperties::get_window_size(m_settings.width, m_settings.height);
     glfwPollEvents();
 }
 

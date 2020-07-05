@@ -2,7 +2,8 @@
 
 #include "core/ActionQueue.hpp"
 #include "core/TimeHelpers.hpp"
-#include "ui/UIIncludes.hpp"
+#include "ui/ImguiData.hpp"
+#include "input/InputWindow.hpp"
 
 #include <Tracy.hpp>
 #include <glad/glad.h>
@@ -53,6 +54,12 @@ bool Renderer::frame(Core::ScenePtr &scene)
     if (m_last_frame + interval < now || do_anyways)
     {
         ZoneScopedN("Frame");
+
+        int x, y;
+        x = Input::InputWindow::get_window_width();
+        y = Input::InputWindow::get_window_height();
+
+        glViewport(0, 0, x, y);
         // Render Passes
         for (auto pass : m_render_pipeline)
         {
@@ -71,12 +78,17 @@ bool Renderer::frame(Core::ScenePtr &scene)
                 scene->render_ui(m_last_buffer->get_handle());
                 break;
             case RENDERPASS_RESET:
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glBindFramebuffer(GL_FRAMEBUFFER,
                                   m_postprocess_buffer->get_handle());
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glBindFramebuffer(GL_FRAMEBUFFER,
                                   m_forward_buffer->get_handle());
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                break;
+            case RENDERPASS_DONE:
+
                 break;
             }
         }

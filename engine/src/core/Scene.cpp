@@ -94,26 +94,7 @@ void Scene::render_postprocess(uint framebuffer)
 
 /*******************************************************************************/
 
-void Scene::render_ui(uint framebuffer)
-{
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    if (framebuffer != 0)
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
-    for (auto &&draw_func : m_ui_functions)
-    {
-        draw_func();
-    }
-
-    ImGui::EndFrame();
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
+void Scene::render_ui(uint framebuffer) {}
 
 /*******************************************************************************/
 

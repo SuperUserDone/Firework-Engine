@@ -14,7 +14,8 @@ enum RenderPass
     RENDERPASS_RESET,
     RENDERPASS_FORWARD,
     RENDERPASS_POST_PROCESS,
-    RENDERPASS_UI
+    RENDERPASS_UI,
+    RENDERPASS_DONE
 };
 
 } // namespace Render

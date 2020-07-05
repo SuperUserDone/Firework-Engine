@@ -50,6 +50,8 @@ public:
 
     uint get_handle();
 
+    uint get_texture();
+
     ~Framebuffer();
 };
 

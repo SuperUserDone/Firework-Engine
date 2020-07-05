@@ -3,7 +3,7 @@
 #include "core/ActionQueue.hpp"
 #include "core/components/ComponentTransform.hpp"
 #include "core/objects/ObjectCamera.hpp"
-#include "window/RuntimeProperties.hpp"
+#include "input/InputWindow.hpp"
 
 namespace FW
 {
@@ -17,7 +17,8 @@ void ObjectCamera::load_assets() {}
 void ObjectCamera::load_ogl()
 {
     int x, y;
-    Window::RuntimeProperties::get_window_size(x, y);
+    x = Input::InputWindow::get_window_width();
+    y = Input::InputWindow::get_window_height();
     last_x = x;
     last_y = y;
 
@@ -104,7 +105,14 @@ void ObjectCamera::add_component(std::shared_ptr<Component> comp) {}
 void ObjectCamera::setup_render()
 {
     int x, y;
-    Window::RuntimeProperties::get_window_size(x, y);
+    x = Input::InputWindow::get_window_width();
+    y = Input::InputWindow::get_window_height();
+
+    if (x == last_x && y == last_y)
+        return;
+
+    last_x = x;
+    last_y = y;
 
     m_projection =
         glm::perspective(glm::radians(90.f), (float)x / (float)y, 0.1f, 100.f);
