@@ -19,6 +19,12 @@ pkg_check_modules(ASSIMP REQUIRED assimp)
 set(SIMDJSON_JUST_LIBRARY ON CACHE STRING "Build just the library, nothing else." FORCE)
 add_subdirectory(simdjson EXCLUDE_FROM_ALL)
 
+set(APP_DIR "${CMAKE_CURRENT_LIST_DIR}")
+set(BLEND2D_DIR "${APP_DIR}/blend2d")
+
+set(BLEND2D_STATIC TRUE)
+include("./blend2d/CMakeLists.txt")
+
 include_directories(
     "${ASSIMP_INCLUDE_DIRS}"
     "${PROJECT_BINARY_DIR}"

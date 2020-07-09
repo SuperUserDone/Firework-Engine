@@ -41,4 +41,4 @@ set(FIREWORK_LIBRARIES
 )
 
 add_library(FireworkEngine SHARED ${FIREWORK_SOURCE})
-target_link_libraries(FireworkEngine ${FIREWORK_LIBRARIES} GL)
+target_link_libraries(FireworkEngine ${FIREWORK_LIBRARIES} GL Blend2D::Blend2D)
