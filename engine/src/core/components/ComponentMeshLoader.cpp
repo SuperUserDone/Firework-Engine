@@ -112,7 +112,7 @@ void ComponentMeshLoader::setup_render() {}
 
 /*******************************************************************************/
 
-void ComponentMeshLoader::render_forward() const {}
+void ComponentMeshLoader::render_forward(bool override_shaders) const {}
 
 /*******************************************************************************/
 

@@ -139,7 +139,7 @@ void ObjectCamera::setup_render()
 
 /*******************************************************************************/
 
-void ObjectCamera::render_forward() const {}
+void ObjectCamera::render_forward(bool override_shaders) const {}
 
 /*******************************************************************************/
 

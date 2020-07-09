@@ -47,7 +47,7 @@ public:
 
     // Rendering
     virtual void setup_render() = 0;
-    virtual void render_forward() const = 0;
+    virtual void render_forward(bool override_shaders) const = 0;
 
     // Updating
     virtual void tick() = 0;

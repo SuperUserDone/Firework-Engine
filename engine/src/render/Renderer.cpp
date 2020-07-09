@@ -2,8 +2,8 @@
 
 #include "core/ActionQueue.hpp"
 #include "core/TimeHelpers.hpp"
-#include "ui/ImguiData.hpp"
 #include "input/InputWindow.hpp"
+#include "ui/ImguiData.hpp"
 
 #include <Tracy.hpp>
 #include <glad/glad.h>
@@ -66,7 +66,7 @@ bool Renderer::frame(Core::ScenePtr &scene)
             switch (pass)
             {
             case RENDERPASS_FORWARD:
-                scene->render_forward(m_forward_buffer->get_handle());
+                scene->render_forward(m_forward_buffer->get_handle(), false);
                 m_last_buffer = m_forward_buffer;
                 break;
             case RENDERPASS_POST_PROCESS:

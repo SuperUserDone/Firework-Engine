@@ -54,7 +54,7 @@ public:
     void add_camera(std::shared_ptr<ObjectCamera> obj);
 
     // Rendering functions
-    void render_forward(uint framebuffer);
+    void render_forward(uint framebuffer, bool override_shaders);
     void render_postprocess(uint framebuffer);
     void render_ui(uint framebuffer);
     void setup_postprocess();

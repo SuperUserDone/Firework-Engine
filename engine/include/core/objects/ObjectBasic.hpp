@@ -26,7 +26,7 @@ public:
 
     // Rendering
     virtual void setup_render() override;
-    virtual void render_forward() const override;
+    virtual void render_forward(bool override_shaders) const override;
 
     // Components
 

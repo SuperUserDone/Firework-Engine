@@ -45,7 +45,7 @@ void Scene::add_camera(std::shared_ptr<ObjectCamera> obj)
 
 /*******************************************************************************/
 
-void Scene::render_forward(uint framebuffer)
+void Scene::render_forward(uint framebuffer, bool override_shaders)
 {
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     if (framebuffer != 0)
@@ -67,9 +67,9 @@ void Scene::render_forward(uint framebuffer)
         update_lamps();
 
     std::for_each(std::begin(m_objects), std::end(m_objects),
-                  [](std::shared_ptr<ObjectBasic> obj) {
+                  [override_shaders](std::shared_ptr<ObjectBasic> obj) {
                       obj->setup_render();
-                      obj->render_forward();
+                      obj->render_forward(override_shaders);
                   });
 }
 

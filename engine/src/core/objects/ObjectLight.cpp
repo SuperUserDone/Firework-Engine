@@ -25,7 +25,7 @@ void ObjectLight::setup_render() {}
 
 /*******************************************************************************/
 
-void ObjectLight::render_forward() const {}
+void ObjectLight::render_forward(bool override_shaders) const {}
 
 /*******************************************************************************/
 

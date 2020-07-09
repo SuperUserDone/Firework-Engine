@@ -9,9 +9,9 @@ namespace Core
 ComponentMaterial::ComponentMaterial(const std::string &path) : m_mat(path)
 {
     ActionQueue::get_instance().add_top_action(Action::new_action( //
-        [this]() { this->load_assets(); },                            //
+        [this]() { this->load_assets(); },                         //
         [this]() { this->load_ogl(); }));
-    
+
     m_is_loaded = false;
 }
 
@@ -37,9 +37,9 @@ void ComponentMaterial::setup_render() {}
 
 /*******************************************************************************/
 
-void ComponentMaterial::render_forward() const
+void ComponentMaterial::render_forward(bool override_shaders) const
 {
-    if (m_is_loaded)
+    if (m_is_loaded && !override_shaders)
         m_mat.activate();
 }
 

@@ -39,7 +39,7 @@ void ComponentMesh::setup_render() {}
 
 /*******************************************************************************/
 
-void ComponentMesh::render_forward() const
+void ComponentMesh::render_forward(bool override_shaders) const
 {
     if (!m_is_loaded)
         return;

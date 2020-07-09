@@ -121,7 +121,7 @@ void ComponentTransform::setup_render()
 
 /*******************************************************************************/
 
-void ComponentTransform::render_forward() const {}
+void ComponentTransform::render_forward(bool override_shaders) const {}
 
 /*******************************************************************************/
 
