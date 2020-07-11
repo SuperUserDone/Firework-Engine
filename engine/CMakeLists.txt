@@ -35,10 +35,12 @@ set(FIREWORK_LIBRARIES
     glfw
     simdjson
     ${ASSIMP_LIBRARIES}
+    ${FREETYPE_LIBRARIES}
     tracy
     pthread
     dl
+    GL
 )
 
 add_library(FireworkEngine SHARED ${FIREWORK_SOURCE})
-target_link_libraries(FireworkEngine ${FIREWORK_LIBRARIES} GL Blend2D::Blend2D)
+target_link_libraries(FireworkEngine ${FIREWORK_LIBRARIES})
