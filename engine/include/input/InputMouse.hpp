@@ -33,21 +33,30 @@ enum MouseButton
 class InputMouse
 {
 private:
-    static MouseSource source;
+    static inline MouseSource m_source;
+
+    static inline double m_x = 0;
+    static inline double m_y = 0;
+
+    static inline GLFWwindow *m_window = nullptr;
 
 public:
-    static uint get_mouse_x();
-    static uint get_mouse_y();
+    static double get_mouse_x();
+    static double get_mouse_y();
+
+    static void set_fps_cursor(bool cursor);
+
+    static void set_cursor_pos(double x, double y);
 
     static void set_mouse_provider(const MouseSource &source);
 
+    static void set_window(GLFWwindow *window) { m_window = window; }
+
     static bool is_mouse_button_down(MouseButton btn);
 
-    static void cursor_position_callback(GLFWwindow *window, double xpos,
-                                         double ypos);
+    static void glfw_mouse_callback(GLFWwindow *window, double x, double y);
 
-    static void mouse_button_callback(GLFWwindow *window, int button,
-                                      int action, int mods);
+    static void imgui_mouse_callback(double x, double y);
 
     static void scroll_callback(GLFWwindow *window, double xoffset,
                                 double yoffset);

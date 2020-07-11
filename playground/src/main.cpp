@@ -7,6 +7,8 @@
 #include <core/components/ComponentMeshLoader.hpp>
 #include <core/components/ComponentTransform.hpp>
 #include <input/InputKeyboard.hpp>
+#include <input/InputMouse.hpp>
+#include <input/InputWindow.hpp>
 #include <render/CubeMap.hpp>
 #include <render/Framebuffer.hpp>
 #include <render/Material.hpp>
@@ -69,38 +71,68 @@ int main()
     auto cam_trans = std::dynamic_pointer_cast<FW::Core::ComponentTransform>(
         camera->get_components()[0]);
 
+    FW::Input::InputMouse::set_fps_cursor(true);
+
+    bool fps = true;
+
     while (!win.check_close())
     {
         if (renderer.smart_frame(test_scene))
         {
-            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_D))
-                cam_trans->rotate(glm::vec3(0, 0, glm::radians(-1.5f)));
 
-            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_A))
-                cam_trans->rotate(glm::vec3(0, 0, glm::radians(1.5f)));
+            double posx = 0;
+            double posy = 0;
+            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_ESCAPE))
+            {
+                FW::Input::InputMouse::set_fps_cursor(false);
+                fps = false;
+            }
+
+            if (fps)
+            {
+                posx = FW::Input::InputMouse::get_mouse_x() -
+                       FW::Input::InputWindow::get_window_width() / 2;
+                posy = FW::Input::InputMouse::get_mouse_y() -
+                       FW::Input::InputWindow::get_window_height() / 2;
+                FW::Input::InputMouse::set_cursor_pos(
+                    FW::Input::InputWindow::get_window_width() / 2,
+                    FW::Input::InputWindow::get_window_height() / 2);
+            }
+
+            cam_trans->rotate(glm::vec3(glm::radians(-0.2f * posy), 0,
+                                        glm::radians(-0.2f * posx)));
+
+            glm::vec3 rot = cam_trans->get_rot();
+            glm::vec3 direction;
+
+            direction.x = sin(rot.z);
+            direction.y = -cos(rot.z);
+            direction.z = cos(rot.x);
+
+            direction = glm::normalize(direction);
 
             if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_W))
             {
-                glm::vec3 rot = cam_trans->get_rot();
-                glm::vec3 direction;
-
-                direction.y = cos(rot.z);
-                direction.x = -sin(rot.z);
-                direction.z = 0;
-
-                cam_trans->translate(direction * glm::vec3(0.03));
+                cam_trans->translate(direction * glm::vec3(-0.03));
             }
 
             if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_S))
             {
-                glm::vec3 rot = cam_trans->get_rot();
-                glm::vec3 direction;
+                cam_trans->translate(direction * glm::vec3(0.03));
+            }
 
-                direction.y = cos(rot.z);
-                direction.x = -sin(rot.z);
-                direction.z = 0;
+            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_A))
+            {
+                cam_trans->translate(
+                    glm::normalize(glm::cross(direction, glm::vec3(0, 0, 1))) *
+                    glm::vec3(0.03));
+            }
 
-                cam_trans->translate(direction * glm::vec3(-0.03));
+            if (FW::Input::InputKeyboard::is_key_down(FW::Input::FW_KEY_D))
+            {
+                cam_trans->translate(
+                    glm::normalize(glm::cross(direction, glm::vec3(0, 0, 1))) *
+                    glm::vec3(-0.03));
             }
 
             win.swap_buffers();

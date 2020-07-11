@@ -21,11 +21,6 @@ bool InputKeyboard::is_key_down(const std::string &mapped_name)
     return false;
 }
 
-void InputKeyboard::key_callback(GLFWwindow *window, int key, int scancode,
-                                 int action, int mods)
-{
-}
-
 void InputKeyboard::character_callback(GLFWwindow *window,
                                        unsigned int codepoint)
 {

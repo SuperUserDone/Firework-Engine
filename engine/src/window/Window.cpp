@@ -7,6 +7,7 @@
 #include "window/Window.hpp"
 
 #include "input/InputKeyboard.hpp"
+#include "input/InputMouse.hpp"
 #include "input/InputWindow.hpp"
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
@@ -133,11 +134,12 @@ void Window::make_window()
     Input::InputWindow::set_resize_provider(Input::WINDOW_SOURCE_GLFW);
 
     Input::InputKeyboard::set_window(m_window);
+    Input::InputMouse::set_window(m_window);
 
     glfwSetWindowSizeCallback(m_window,
                               &Input::InputWindow::glfw_resize_callback);
-    glfwSetKeyCallback(m_window, &Input::InputKeyboard::key_callback);
     glfwSetCharCallback(m_window, &Input::InputKeyboard::character_callback);
+    glfwSetCursorPosCallback(m_window, &Input::InputMouse::glfw_mouse_callback);
 }
 
 /*******************************************************************************/

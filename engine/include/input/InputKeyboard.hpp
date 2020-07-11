@@ -26,9 +26,6 @@ public:
 
     static void set_window(GLFWwindow *window) { m_window = window; }
 
-    static void key_callback(GLFWwindow *window, int key, int scancode,
-                             int action, int mods);
-
     static void character_callback(GLFWwindow *window, unsigned int codepoint);
 };
 
