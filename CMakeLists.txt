@@ -17,6 +17,7 @@ find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(ASSIMP REQUIRED assimp)
 pkg_check_modules(FREETYPE REQUIRED freetype2)
+pkg_check_modules(LUA lua)
 
 set(SIMDJSON_JUST_LIBRARY ON CACHE STRING "Build just the library, nothing else." FORCE)
 add_subdirectory(simdjson EXCLUDE_FROM_ALL)
@@ -35,12 +36,16 @@ include_directories(
     "imgui/examples"
 )
 
+set(PLATFORM_LIBRARIES
+    dl
+    pthread
+)
+
 if(${FIREWORK_TRACY_PROFILER})
 add_definitions(-DTRACY_ENABLE)
 endif()
 
 add_definitions(-W -Wall -pedantic -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-value -Wno-sign-compare)
-
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 add_library(tracy SHARED "tracy/TracyClient.cpp")

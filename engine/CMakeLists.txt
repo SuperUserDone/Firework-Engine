@@ -27,18 +27,20 @@ set(FIREWORK_SOURCE
 "src/render/RenderPass.cpp"
 "src/render/Shader.cpp"
 "src/render/Texture.cpp"
+"src/scripting/lua/LuaState.cpp"
+"src/scripting/lua/LuaScript.cpp"
 "src/ui/ImguiData.cpp"
 "src/window/Window.cpp"
 )
 
 set(FIREWORK_LIBRARIES
+    ${FREETYPE_LIBRARIES}
+    ${PLATFORM_LIBRARIES}
+    ${ASSIMP_LIBRARIES}
+    ${LUA_LIBRARIES}
     glfw
     simdjson
-    ${ASSIMP_LIBRARIES}
-    ${FREETYPE_LIBRARIES}
     tracy
-    pthread
-    dl
     GL
 )
 
