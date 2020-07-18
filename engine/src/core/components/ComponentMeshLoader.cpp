@@ -15,7 +15,7 @@ namespace Core
 ComponentMeshLoader::ComponentMeshLoader(const std::string &path) : m_path(path)
 {
     ActionQueue::get_instance().add_top_action(Action::new_action( //
-        [this]() { this->load_assets(); },                            //
+        [this]() { this->load_assets(); },                         //
         [this]() { this->load_ogl(); }));
 }
 
@@ -69,11 +69,11 @@ void ComponentMeshLoader::load_assets()
 
             if (m_temp_mesh->mTextureCoords[0])
             {
-                vert.uv = {m_temp_mesh->mTextureCoords[0][i].x, //
-                           m_temp_mesh->mTextureCoords[0][i].y};
+                vert.uv_color = {m_temp_mesh->mTextureCoords[0][i].x, //
+                                 m_temp_mesh->mTextureCoords[0][i].y};
             }
             else
-                vert.uv = {0.0f, 0.0f};
+                vert.uv_color = {0.0f, 0.0f};
 
             vertices.push_back(vert);
         }

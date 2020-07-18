@@ -45,7 +45,7 @@ void MeshRenderer::load_ogl()
     // vertex texture coords
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                          (void *)offsetof(Vertex, uv));
+                          (void *)offsetof(Vertex, uv_color));
 
     // Tangents
     glEnableVertexAttribArray(3);
