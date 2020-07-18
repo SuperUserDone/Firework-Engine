@@ -17,11 +17,11 @@ void Object::add_component(ComponentPtr comp)
 
 /*******************************************************************************/
 
-ComponentPtrVector &Object::get_components() { return m_components; }
+ComponentPtrVector Object::get_components() { return m_components; }
 
 /*******************************************************************************/
 
-ComponentPtrVector &Object::get_components_type(ComponentType type)
+ComponentPtrVector Object::get_components_type(ComponentType type)
 {
     ComponentPtrVector temp;
 
@@ -31,7 +31,7 @@ ComponentPtrVector &Object::get_components_type(ComponentType type)
             temp.push_back(comp);
     }
 
-    return temp;
+    return ComponentPtrVector(temp);
 }
 
 /*******************************************************************************/

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-set_property(GLOBAL PROPERTY CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(FIREWORK_VERSION_MAJOR 0 CACHE STRING "Major")
 set(FIREWORK_VERSION_MINOR 0 CACHE STRING "Minor")
@@ -37,6 +38,8 @@ include_directories(
 if(${FIREWORK_TRACY_PROFILER})
 add_definitions(-DTRACY_ENABLE)
 endif()
+
+add_definitions(-W -Wall -pedantic -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-value -Wno-sign-compare)
 
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 

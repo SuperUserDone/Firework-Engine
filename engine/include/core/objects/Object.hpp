@@ -27,7 +27,6 @@ protected:
     bool m_is_static = false;
     bool m_changed = false;
 
-
 public:
     Object();
 
@@ -35,11 +34,11 @@ public:
     virtual void load_assets() = 0;
     virtual void load_ogl() = 0;
     virtual void unload() = 0;
-    
+
     // Components
     virtual void add_component(ComponentPtr comp);
-    virtual ComponentPtrVector &get_components();
-    virtual ComponentPtrVector &get_components_type(ComponentType type);
+    virtual ComponentPtrVector get_components();
+    virtual ComponentPtrVector get_components_type(ComponentType type);
     virtual int get_component_count();
 
     // Checks

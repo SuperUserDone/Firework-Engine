@@ -34,7 +34,7 @@ void InputMouse::set_mouse_provider(const MouseSource &source)
     m_source = source;
 }
 
-bool InputMouse::is_mouse_button_down(MouseButton btn) {}
+bool InputMouse::is_mouse_button_down(MouseButton btn) { return false; }
 
 void InputMouse::glfw_mouse_callback(GLFWwindow *window, double x, double y)
 {

@@ -61,9 +61,9 @@ void ActionQueue::force_all() {}
 
 /*******************************************************************************/
 
-void ActionQueue::digest(ActionPtrQueue &queue, int count, int max)
+void ActionQueue::digest(ActionPtrQueue &queue, uint count, uint max)
 {
-    int presize = queue.size();
+    uint presize = queue.size();
 
     if (presize <= 0)
         return;

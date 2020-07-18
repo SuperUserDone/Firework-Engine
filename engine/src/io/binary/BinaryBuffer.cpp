@@ -21,11 +21,11 @@ BinaryBuffer::BinaryBuffer(const std::vector<uint8_t> &data) : m_data(data) {}
 
 /*******************************************************************************/
 
-bool BinaryBuffer::load_from_file(const std::string &path) {}
+bool BinaryBuffer::load_from_file(const std::string &path) { return true; }
 
 /*******************************************************************************/
 
-bool BinaryBuffer::save_to_file(const std::string &path) {}
+bool BinaryBuffer::save_to_file(const std::string &path) { return true; }
 
 /*******************************************************************************/
 
@@ -73,15 +73,21 @@ void BinaryBuffer::set_string(uint32_t offset, const std::string &str) {}
 
 /*******************************************************************************/
 
-std::vector<uint8_t> BinaryBuffer::get_buffer(uint32_t offset, int len) {}
+std::vector<uint8_t> BinaryBuffer::get_buffer(uint32_t offset, int len)
+{
+    return std::vector<uint8_t>();
+}
 
 /*******************************************************************************/
 
-BinaryBufferPtr BinaryBuffer::get_binary_buffer(uint32_t offset, int len) {}
+BinaryBufferPtr BinaryBuffer::get_binary_buffer(uint32_t offset, int len)
+{
+    return BinaryBufferPtr(nullptr);
+}
 
 /*******************************************************************************/
 
-std::string BinaryBuffer::get_string(uint32_t offset, int maxlen) {}
+std::string BinaryBuffer::get_string(uint32_t offset, int maxlen) { return ""; }
 
 /*******************************************************************************/
 

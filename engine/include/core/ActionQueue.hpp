@@ -26,7 +26,7 @@ private:
     // Pool
     ctpl::thread_pool m_action_pool;
 
-    void digest(ActionPtrQueue &queue, int count, int max);
+    void digest(ActionPtrQueue &queue, uint count, uint max);
 
 public:
     ActionQueue() : m_action_pool(4) {}
