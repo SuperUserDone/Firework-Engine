@@ -6,6 +6,7 @@
 #include <glad/glad.h>
 
 #include "core/mesh/Mesh.hpp"
+#include "render/RendererBase.hpp"
 #include "render/Types.hpp"
 
 namespace FW
@@ -20,7 +21,7 @@ enum UpdateMode
     MODE_RANGE
 };
 
-class MeshRenderer
+class MeshRenderer : public RendererBase
 {
 private:
     std::atomic_bool m_is_loaded;
@@ -35,16 +36,16 @@ private:
 public:
     MeshRenderer(Core::MeshPtr mesh);
 
-    void update(const std::vector<Vertex> &data, int mode = MODE_FULL,
-                int begin = 0, int end = 0, bool re_alloc = false);
+    virtual void update(const std::vector<Vertex> &data, int mode = MODE_FULL,
+                        int begin = 0, int end = 0, bool re_alloc = false);
 
     // Loading
-    void load_ogl();
-    void update_ogl();
-    void unload_ogl();
+    virtual void load_ogl() override;
+    virtual void update_ogl() override;
+    virtual void unload_ogl() override;
 
     // Rendering
-    void render_forward() const;
+    virtual void render_forward() const override;
 
     ~MeshRenderer();
 };

@@ -7,10 +7,11 @@ namespace Core
 
 /*******************************************************************************/
 
-ComponentMesh::ComponentMesh(MeshPtr mesh) : m_renderer(mesh)
+ComponentMesh::ComponentMesh(MeshPtr mesh)
 {
+    m_renderer = std::make_shared<Render::MeshRenderer>(mesh);
     ActionQueue::get_instance().add_top_action(Action::new_action( //
-        [this]() { this->load_assets(); },                            //
+        [this]() { this->load_assets(); },                         //
         [this]() { this->load_ogl(); }));
 
     m_is_loaded = false;
@@ -25,7 +26,7 @@ void ComponentMesh::load_assets() {}
 void ComponentMesh::load_ogl()
 {
     if (!m_is_loaded)
-        m_renderer.load_ogl();
+        m_renderer->load_ogl();
     m_is_loaded = true;
 }
 
@@ -43,7 +44,7 @@ void ComponentMesh::render_forward(bool override_shaders) const
 {
     if (!m_is_loaded)
         return;
-    m_renderer.render_forward();
+    m_renderer->render_forward();
 }
 
 /*******************************************************************************/

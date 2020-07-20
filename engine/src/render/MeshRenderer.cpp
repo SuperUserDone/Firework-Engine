@@ -83,7 +83,12 @@ void MeshRenderer::render_forward() const
 
 /*******************************************************************************/
 
-MeshRenderer::~MeshRenderer() {}
+MeshRenderer::~MeshRenderer()
+{
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+}
 
 } // namespace Render
 } // namespace FW

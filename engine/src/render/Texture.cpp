@@ -93,7 +93,11 @@ void Texture::bind(int slot)
 
 /*******************************************************************************/
 
-void Texture::unload() {}
+void Texture::unload()
+{
+    glDeleteTextures(1, &m_texture);
+    m_loaded = false;
+}
 
 /*******************************************************************************/
 
