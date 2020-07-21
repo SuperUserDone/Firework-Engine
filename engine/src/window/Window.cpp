@@ -167,20 +167,6 @@ void Window::init_opengl()
     glDebugMessageCallback(glDebugOutput, nullptr);
 }
 
-void Window::init_imgui()
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
-
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-    ImGui::StyleColorsDark();
-
-    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-    ImGui_ImplOpenGL3_Init("#version 430 core");
-}
-
 /*******************************************************************************/
 
 Window::Window(const WindowSettings &settings) : m_settings(settings)
@@ -190,7 +176,6 @@ Window::Window(const WindowSettings &settings) : m_settings(settings)
     init_glfw();
     make_window();
     init_opengl();
-    init_imgui();
 }
 
 /*******************************************************************************/
@@ -217,10 +202,6 @@ bool Window::check_close() { return glfwWindowShouldClose(m_window); }
 
 Window::~Window()
 {
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }

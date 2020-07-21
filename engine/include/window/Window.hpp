@@ -5,8 +5,6 @@
 #define GLFW_INCLUDE_NONE
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include "ui/ImguiData.hpp"
 namespace FW
 {
 namespace Window
@@ -41,7 +39,6 @@ private:
     void init_glfw();
     void make_window();
     void init_opengl();
-    void init_imgui();
 
 public:
     Window(const WindowSettings &settings);
