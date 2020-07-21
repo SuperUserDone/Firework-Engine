@@ -9,25 +9,34 @@ namespace Backend
 
 RenderDummy::RenderDummy() {}
 
-uint RenderDummy::create_texture() { return 0; }
+uint RenderDummy::create_texture(const TextureCreateParams &params)
+{
+    return 0;
+}
 
 void RenderDummy::bind_texture(uint slot, uint texture) {}
 
 void RenderDummy::delete_texture(uint texture) {}
 
-uint RenderDummy::create_model() { return 0; }
+uint RenderDummy::create_model(const ModelCreateParams &params) { return 0; }
 
 void RenderDummy::bind_model(uint model) {}
 
 void RenderDummy::delete_vertex_buffer(uint model) {}
 
-uint RenderDummy::create_material() { return 0; }
+uint RenderDummy::create_material(const MaterialCreateParams &params)
+{
+    return 0;
+}
 
 void RenderDummy::bind_material(uint material) {}
 
 void RenderDummy::delete_material(uint material) {}
 
-uint RenderDummy::new_asset_context() { return 0; }
+uint RenderDummy::new_asset_context(const AssetContextParams &params)
+{
+    return 0;
+}
 
 void RenderDummy::bind_asset_context(uint context) {}
 

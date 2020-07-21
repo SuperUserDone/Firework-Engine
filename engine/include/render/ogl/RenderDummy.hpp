@@ -21,22 +21,22 @@ public:
     RenderDummy();
 
     // Textures
-    virtual uint create_texture() override;
+    virtual uint create_texture(const TextureCreateParams &params) override;
     virtual void bind_texture(uint slot, uint texture) override;
     virtual void delete_texture(uint texture) override;
 
     // Moddles
-    virtual uint create_model() override;
+    virtual uint create_model(const ModelCreateParams &params) override;
     virtual void bind_model(uint model) override;
     virtual void delete_vertex_buffer(uint model) override;
 
     // Materials
-    virtual uint create_material() override;
+    virtual uint create_material(const MaterialCreateParams &params) override;
     virtual void bind_material(uint material) override;
     virtual void delete_material(uint material) override;
 
     // Asset Contexts
-    virtual uint new_asset_context() override;
+    virtual uint new_asset_context(const AssetContextParams &params) override;
     virtual void bind_asset_context(uint context) override;
     virtual void delete_asset_context(uint context) override;
 

@@ -37,29 +37,47 @@ struct DrawCommand
     std::vector<glm::mat4> addtional_transforms;
 };
 
+struct TextureCreateParams
+{
+};
+
+struct ModelCreateParams
+{
+};
+
+struct MaterialCreateParams
+{
+};
+
+struct AssetContextParams
+{
+};
+
+struct CameraParams
+{
+};
+
 class RenderBase
 {
 private:
 public:
-    RenderBase();
-
     // Textures
-    virtual uint create_texture() = 0;
+    virtual uint create_texture(const TextureCreateParams &params) = 0;
     virtual void bind_texture(uint slot, uint texture) = 0;
     virtual void delete_texture(uint texture) = 0;
 
     // Moddles
-    virtual uint create_model() = 0;
+    virtual uint create_model(const ModelCreateParams &params) = 0;
     virtual void bind_model(uint model) = 0;
     virtual void delete_vertex_buffer(uint model) = 0;
 
     // Materials
-    virtual uint create_material() = 0;
+    virtual uint create_material(const MaterialCreateParams &params) = 0;
     virtual void bind_material(uint material) = 0;
     virtual void delete_material(uint material) = 0;
 
     // Asset Contexts
-    virtual uint new_asset_context() = 0;
+    virtual uint new_asset_context(const AssetContextParams &params) = 0;
     virtual void bind_asset_context(uint context) = 0;
     virtual void delete_asset_context(uint context) = 0;
 
@@ -73,8 +91,6 @@ public:
 
     // Rendering
     virtual void render() = 0;
-
-    ~RenderBase();
 };
 
 } // namespace Backend

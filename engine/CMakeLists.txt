@@ -5,6 +5,8 @@ set(FIREWORK_SOURCE
 "src/input/InputMouse.cpp"
 "src/input/InputWindow.cpp"
 "src/render/RenderServer.cpp"
+"src/render/ogl/RenderDummy.cpp"
+"src/render/ogl/RenderOpengl.cpp"
 "src/window/Window.cpp"
 )
 

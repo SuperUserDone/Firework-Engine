@@ -8,26 +8,33 @@ namespace Backend
 {
 
 RenderOpengl::RenderOpengl() {}
-
-uint RenderOpengl::create_texture() { return 0; }
-
+uint RenderOpengl::create_texture(const TextureCreateParams &params)
+{
+    return 0;
+}
 void RenderOpengl::bind_texture(uint slot, uint texture) {}
 
 void RenderOpengl::delete_texture(uint texture) {}
 
-uint RenderOpengl::create_model() { return 0; }
+uint RenderOpengl::create_model(const ModelCreateParams &params) { return 0; }
 
 void RenderOpengl::bind_model(uint model) {}
 
 void RenderOpengl::delete_vertex_buffer(uint model) {}
 
-uint RenderOpengl::create_material() { return 0; }
+uint RenderOpengl::create_material(const MaterialCreateParams &params)
+{
+    return 0;
+}
 
 void RenderOpengl::bind_material(uint material) {}
 
 void RenderOpengl::delete_material(uint material) {}
 
-uint RenderOpengl::new_asset_context() { return 0; }
+uint RenderOpengl::new_asset_context(const AssetContextParams &params)
+{
+    return 0;
+}
 
 void RenderOpengl::bind_asset_context(uint context) {}
 
