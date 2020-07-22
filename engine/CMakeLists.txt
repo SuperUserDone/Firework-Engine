@@ -4,6 +4,16 @@ set(FIREWORK_SOURCE
 "src/input/InputKeyboard.cpp"
 "src/input/InputMouse.cpp"
 "src/input/InputWindow.cpp"
+"src/core/manager/AssetManager.cpp"
+"src/core/manager/SceneManager.cpp"
+"src/core/misc/Material.cpp"
+"src/core/misc/Mesh.cpp"
+"src/core/objects/components/Component.cpp"
+"src/core/objects/components/ComponentRenderer.hpp"
+"src/core/objects/components/ComponentScript.hpp"
+"src/core/objects/Camera.cpp"
+"src/core/objects/Object.cpp"
+"src/core/Scene.cpp"
 "src/render/RenderServer.cpp"
 "src/render/ogl/RenderDummy.cpp"
 "src/render/ogl/RenderOpengl.cpp"
@@ -14,7 +24,6 @@ set(FIREWORK_LIBRARIES
     ${FREETYPE_LIBRARIES}
     ${PLATFORM_LIBRARIES}
     ${ASSIMP_LIBRARIES}
-    ${LUA_LIBRARIES}
     glfw
     simdjson
     tracy

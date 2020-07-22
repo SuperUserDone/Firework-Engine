@@ -22,7 +22,7 @@ uint RenderDummy::create_model(const ModelCreateParams &params) { return 0; }
 
 void RenderDummy::bind_model(uint model) {}
 
-void RenderDummy::delete_vertex_buffer(uint model) {}
+void RenderDummy::delete_model(uint model) {}
 
 uint RenderDummy::create_material(const MaterialCreateParams &params)
 {
@@ -38,19 +38,17 @@ uint RenderDummy::new_asset_context(const AssetContextParams &params)
     return 0;
 }
 
-void RenderDummy::bind_asset_context(uint context) {}
-
 void RenderDummy::delete_asset_context(uint context) {}
 
-void RenderDummy::set_camera() {}
+void RenderDummy::set_camera(const CameraParams &params) {}
 
-void RenderDummy::add_to_sorted_drawlist(DrawCommand command) {}
+void RenderDummy::add_to_sorted_drawlist(const DrawCommand &command) {}
 
-void RenderDummy::add_to_opaque_drawlist(DrawCommand command) {}
-
-void RenderDummy::prune_drawlist() {}
+void RenderDummy::add_to_opaque_drawlist(const DrawCommand &command) {}
 
 void RenderDummy::render() {}
+
+RenderDummy::~RenderDummy() {}
 
 } // namespace Backend
 } // namespace Render

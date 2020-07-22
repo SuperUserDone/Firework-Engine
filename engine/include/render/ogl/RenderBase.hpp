@@ -26,7 +26,13 @@ struct Asset
     uint value;
 };
 
-struct DrawCommand
+enum DrawCommandType
+{
+    DRAW_COMMAND_MODEL,
+    DRAW_COMMAND_BEGIN
+};
+
+struct ModelDrawCommand
 {
     uint model;
     uint material;
@@ -35,6 +41,17 @@ struct DrawCommand
 
     glm::mat4 model_matrix;
     std::vector<glm::mat4> addtional_transforms;
+};
+
+union DrawCommandData
+{
+    ModelDrawCommand model;
+};
+
+struct DrawCommand
+{
+    DrawCommandType type;
+    DrawCommandData data;
 };
 
 struct TextureCreateParams
@@ -69,7 +86,7 @@ public:
     // Moddles
     virtual uint create_model(const ModelCreateParams &params) = 0;
     virtual void bind_model(uint model) = 0;
-    virtual void delete_vertex_buffer(uint model) = 0;
+    virtual void delete_model(uint model) = 0;
 
     // Materials
     virtual uint create_material(const MaterialCreateParams &params) = 0;
@@ -78,16 +95,14 @@ public:
 
     // Asset Contexts
     virtual uint new_asset_context(const AssetContextParams &params) = 0;
-    virtual void bind_asset_context(uint context) = 0;
     virtual void delete_asset_context(uint context) = 0;
 
     // Camera
-    virtual void set_camera() = 0;
+    virtual void set_camera(const CameraParams &params) = 0;
 
     // Drawlists
-    virtual void add_to_opaque_drawlist(DrawCommand command) = 0;
-    virtual void add_to_sorted_drawlist(DrawCommand command) = 0;
-    virtual void prune_drawlist() = 0;
+    virtual void add_to_opaque_drawlist(const DrawCommand &command) = 0;
+    virtual void add_to_sorted_drawlist(const DrawCommand &command) = 0;
 
     // Rendering
     virtual void render() = 0;

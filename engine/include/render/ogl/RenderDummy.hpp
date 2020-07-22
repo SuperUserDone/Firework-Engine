@@ -28,7 +28,7 @@ public:
     // Moddles
     virtual uint create_model(const ModelCreateParams &params) override;
     virtual void bind_model(uint model) override;
-    virtual void delete_vertex_buffer(uint model) override;
+    virtual void delete_model(uint model) override;
 
     // Materials
     virtual uint create_material(const MaterialCreateParams &params) override;
@@ -37,16 +37,14 @@ public:
 
     // Asset Contexts
     virtual uint new_asset_context(const AssetContextParams &params) override;
-    virtual void bind_asset_context(uint context) override;
     virtual void delete_asset_context(uint context) override;
 
     // Camera
-    virtual void set_camera() override;
+    virtual void set_camera(const CameraParams &params) override;
 
     // Drawlists
-    virtual void add_to_opaque_drawlist(DrawCommand command) override;
-    virtual void add_to_sorted_drawlist(DrawCommand command) override;
-    virtual void prune_drawlist() override;
+    virtual void add_to_opaque_drawlist(const DrawCommand &command) override;
+    virtual void add_to_sorted_drawlist(const DrawCommand &command) override;
 
     // Rendering
     virtual void render() override;

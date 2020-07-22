@@ -17,7 +17,6 @@ find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(ASSIMP REQUIRED assimp)
 pkg_check_modules(FREETYPE REQUIRED freetype2)
-pkg_check_modules(LUA lua)
 
 set(SIMDJSON_JUST_LIBRARY ON CACHE STRING "Build just the library, nothing else." FORCE)
 add_subdirectory(simdjson EXCLUDE_FROM_ALL)

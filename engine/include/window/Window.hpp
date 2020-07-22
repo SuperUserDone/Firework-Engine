@@ -3,8 +3,10 @@
 #include <string>
 
 #define GLFW_INCLUDE_NONE
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
+
+#include <loguru.hpp>
 namespace FW
 {
 namespace Window
@@ -37,14 +39,15 @@ private:
 
     // Methods
     void init_glfw();
-    void make_window();
-    void init_opengl();
 
 public:
     Window(const WindowSettings &settings);
 
+    void make_window();
     void poll_events();
     void swap_buffers();
+
+    void make_current();
 
     bool check_close();
 
