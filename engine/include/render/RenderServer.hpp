@@ -59,27 +59,38 @@ class RenderServer
 private:
     std::thread m_render_thread;
 
-    std::mutex m_frame_lock;
-
     std::atomic_bool m_running = false;
-    std::promise<void> m_queue_complete_promise;
-    std::future<void> m_queue_complete_future;
+    std::atomic_bool m_queue_done;
+
+    std::promise<void> m_init_promise;
+    std::future<void> m_init_future;
 
     RendererBackend m_render_backend_type;
     std::unique_ptr<Backend::RenderBase> m_render_backend;
 
     moodycamel::ConcurrentQueue<Action> m_action_queue;
 
-    Window::Window *m_window;
+    Window::Window m_window;
 
     void init_renderer(RendererBackend backend);
-    void render_thread(Window::Window *win, RendererBackend backend);
+    void render_thread(RendererBackend backend);
 
     void process_action();
 
+    RenderServer(RenderServer const &) = delete;
+    void operator=(RenderServer const &) = delete;
+
 public:
-    RenderServer(Window::Window *win,
+    RenderServer(const Window::WindowSettings &win,
                  RendererBackend backend = RENDER_BACKEND_OPENGL43);
+
+    static RenderServer &get_instance() { return init({}); }
+    static RenderServer &init(const Window::WindowSettings &win,
+                              RendererBackend backend = RENDER_BACKEND_OPENGL43)
+    {
+        static RenderServer instance(win, backend);
+        return instance;
+    }
 
     // Textures
     virtual std::future<uint>
@@ -108,6 +119,9 @@ public:
     // Drawlists
     virtual void add_to_opaque_drawlist(const Backend::DrawCommand &command);
     virtual void add_to_sorted_drawlist(const Backend::DrawCommand &command);
+
+    virtual bool check_close() { return m_window.check_close(); }
+    virtual void poll_events() { m_window.poll_events(); }
 
     ~RenderServer();
 };

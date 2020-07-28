@@ -20,7 +20,9 @@ void RenderDummy::delete_texture(uint texture) {}
 
 uint RenderDummy::create_model(const ModelCreateParams &params) { return 0; }
 
-void RenderDummy::bind_model(uint model) {}
+void RenderDummy::draw_model(uint model) {}
+
+void RenderDummy::set_model_properties(const ModelProperties &props) {}
 
 void RenderDummy::delete_model(uint model) {}
 
@@ -45,6 +47,8 @@ void RenderDummy::set_camera(const CameraParams &params) {}
 void RenderDummy::add_to_sorted_drawlist(const DrawCommand &command) {}
 
 void RenderDummy::add_to_opaque_drawlist(const DrawCommand &command) {}
+
+void RenderDummy::clear_drawlists() {}
 
 void RenderDummy::render() {}
 

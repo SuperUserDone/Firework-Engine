@@ -89,6 +89,8 @@ void Window::poll_events()
 void Window::swap_buffers()
 {
     ZoneScopedN("Buffer Swap");
+    if (!m_window)
+        return;
     glfwSwapBuffers(m_window);
 }
 
@@ -106,6 +108,7 @@ bool Window::check_close()
 Window::~Window()
 {
     glfwDestroyWindow(m_window);
+    m_window = nullptr;
     glfwTerminate();
 }
 

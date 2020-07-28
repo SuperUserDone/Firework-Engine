@@ -71,37 +71,37 @@ void RenderServer::process_action()
     act.output->set_value(value);
 }
 
-void RenderServer::render_thread(Window::Window *win, RendererBackend backend)
+void RenderServer::render_thread(RendererBackend backend)
 {
-    m_window = win;
     using namespace std::chrono_literals;
-    win->make_window();
-    win->make_current();
+    m_window.make_window();
+    m_window.make_current();
     init_renderer(backend);
+    m_init_promise.set_value();
 
     m_running = true;
-    m_queue_complete_future = m_queue_complete_promise.get_future();
     while (m_running)
     {
-        while (m_queue_complete_future.wait_for(1ms) ==
-               std::future_status::timeout)
+        m_queue_done = false;
+        while (!m_queue_done)
             process_action();
 
-        m_queue_complete_future.get();
-
         m_render_backend->render();
-        m_window->swap_buffers();
-        m_queue_complete_promise = std::promise<void>();
-        m_queue_complete_future = m_queue_complete_promise.get_future();
-        m_frame_lock.unlock();
+        m_window.swap_buffers();
     }
 }
 
-RenderServer::RenderServer(Window::Window *win, RendererBackend backend)
+RenderServer::RenderServer(const Window::WindowSettings &win,
+                           RendererBackend backend)
+    : m_window(win)
 {
+    m_init_promise = std::promise<void>();
+    m_init_future = m_init_promise.get_future();
 
-    m_render_thread = std::thread(
-        std::bind(&RenderServer::render_thread, this, win, backend));
+    m_render_thread =
+        std::thread(std::bind(&RenderServer::render_thread, this, backend));
+
+    m_init_future.wait();
 }
 
 std::future<uint>
@@ -196,11 +196,7 @@ void RenderServer::delete_asset_context(uint context)
     m_action_queue.enqueue(act);
 }
 
-void RenderServer::set_done()
-{
-    m_frame_lock.lock();
-    m_queue_complete_promise.set_value();
-}
+void RenderServer::set_done() { m_queue_done = true; }
 
 void RenderServer::set_camera(const Backend::CameraParams &params)
 {
@@ -211,7 +207,10 @@ void RenderServer::add_to_opaque_drawlist(const Backend::DrawCommand &command)
 {
     if (command.type == Backend::DRAW_COMMAND_BEGIN)
     {
-        std::lock_guard<std::mutex> frame(m_frame_lock);
+        while (m_queue_done)
+        {
+        }
+        m_render_backend->clear_drawlists();
     }
     m_render_backend->add_to_opaque_drawlist(command);
 }
@@ -220,7 +219,10 @@ void RenderServer::add_to_sorted_drawlist(const Backend::DrawCommand &command)
 {
     if (command.type == Backend::DRAW_COMMAND_BEGIN)
     {
-        std::lock_guard<std::mutex> frame(m_frame_lock);
+        while (m_queue_done)
+        {
+        }
+        m_render_backend->clear_drawlists();
     }
     m_render_backend->add_to_sorted_drawlist(command);
 }
@@ -228,10 +230,8 @@ void RenderServer::add_to_sorted_drawlist(const Backend::DrawCommand &command)
 RenderServer::~RenderServer()
 {
     m_running = false;
-    m_frame_lock.lock();
-    m_queue_complete_promise.set_value();
+    m_queue_done = true;
     m_render_thread.join();
-    m_window->~Window();
 }
 
 } // namespace Render

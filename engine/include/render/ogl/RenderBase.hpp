@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include "core/misc/Mesh.hpp"
+
 namespace FW
 {
 namespace Render
@@ -26,21 +28,31 @@ struct Asset
     uint value;
 };
 
+struct AssetContext
+{
+    uint id;
+    std::vector<Asset> m_assets;
+};
+
 enum DrawCommandType
 {
     DRAW_COMMAND_MODEL,
     DRAW_COMMAND_BEGIN
 };
 
-struct ModelDrawCommand
+struct ModelProperties
 {
-    uint model;
     uint material;
 
     bool use_camera;
 
     glm::mat4 model_matrix;
-    std::vector<glm::mat4> addtional_transforms;
+};
+
+struct ModelDrawCommand
+{
+    uint model;
+    ModelProperties props;
 };
 
 union DrawCommandData
@@ -56,18 +68,23 @@ struct DrawCommand
 
 struct TextureCreateParams
 {
+    uint asset_context;
 };
 
 struct ModelCreateParams
 {
+    uint asset_context;
+    Core::Mesh *mesh;
 };
 
 struct MaterialCreateParams
 {
+    uint asset_context;
 };
 
 struct AssetContextParams
 {
+    uint prealloc;
 };
 
 struct CameraParams
@@ -85,7 +102,8 @@ public:
 
     // Moddles
     virtual uint create_model(const ModelCreateParams &params) = 0;
-    virtual void bind_model(uint model) = 0;
+    virtual void set_model_properties(const ModelProperties &props) = 0;
+    virtual void draw_model(uint model) = 0;
     virtual void delete_model(uint model) = 0;
 
     // Materials
@@ -103,6 +121,7 @@ public:
     // Drawlists
     virtual void add_to_opaque_drawlist(const DrawCommand &command) = 0;
     virtual void add_to_sorted_drawlist(const DrawCommand &command) = 0;
+    virtual void clear_drawlists() = 0;
 
     // Rendering
     virtual void render() = 0;

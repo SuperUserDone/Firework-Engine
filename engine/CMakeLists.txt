@@ -14,6 +14,7 @@ set(FIREWORK_SOURCE
 "src/core/objects/Camera.cpp"
 "src/core/objects/Object.cpp"
 "src/core/Scene.cpp"
+"src/render/RendererMesh.cpp"
 "src/render/RenderServer.cpp"
 "src/render/ogl/RenderDummy.cpp"
 "src/render/ogl/RenderOpengl.cpp"

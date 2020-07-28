@@ -27,7 +27,8 @@ public:
 
     // Moddles
     virtual uint create_model(const ModelCreateParams &params) override;
-    virtual void bind_model(uint model) override;
+    virtual void draw_model(uint model) override;
+    virtual void set_model_properties(const ModelProperties &props) override;
     virtual void delete_model(uint model) override;
 
     // Materials
@@ -45,6 +46,7 @@ public:
     // Drawlists
     virtual void add_to_opaque_drawlist(const DrawCommand &command) override;
     virtual void add_to_sorted_drawlist(const DrawCommand &command) override;
+    virtual void clear_drawlists() override;
 
     // Rendering
     virtual void render() override;
