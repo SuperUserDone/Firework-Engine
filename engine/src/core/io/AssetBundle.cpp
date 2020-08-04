@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include <simdjson.h>
+
 namespace FW
 {
 namespace Core
@@ -12,22 +14,6 @@ void AssetBundle::file_loading(uint8_t *data)
     if (data == nullptr)
         throw std::invalid_argument(
             "Got null in a internal function! This should not happen.");
-
-    AssetBundleFileHeader header;
-
-    for (size_t i = 4; i < 0x104; i++)
-    {
-        if ((char)data[i] == '\0')
-            break;
-
-        header.name.push_back((char)data[i]);
-    }
-
-    memcpy(&header.parent_folder_id, &data[0x104], 4);
-    memcpy(&header.block_count, &data[0x108], 4);
-    memcpy(&header.compression_magic, &data[0x10C], 4);
-    memcpy(&header.uncompressed_byte_size, &data[0x110], 8);
-    memcpy(&header.compressed_byte_size, &data[0x118], 8);
 }
 
 void AssetBundle::folder_loading(uint8_t *data)
@@ -39,60 +25,75 @@ void AssetBundle::folder_loading(uint8_t *data)
 
 void AssetBundle::tree_worker()
 {
-    std::ifstream file(m_path, std::ios::binary);
-
-    if (!file)
-        throw std::runtime_error("Failed to load bundle " + m_path +
-                                 "! Invalid path/other");
-
-    file.seekg(0, file.end);
-    uint64_t length = file.tellg();
-    file.seekg(0, file.beg);
-
-    uint32_t magic = 0;
-    file.read((char *)&magic, 4);
-    file.read((char *)&m_header.version, 4);
-    file.read((char *)&m_header.block_count, 4);
-
-    if (magic != 0x42415746)
-        throw std::runtime_error("Failed to load bundle " + m_path +
-                                 "! Invalid File Magic");
-
-    file.seekg(512);
-    uint64_t block_offset = 1;
-
-    while ((block_offset + 1) * 512 <= length)
+    if (m_debug)
     {
-        file.seekg(512 * block_offset);
+        simdjson::dom::parser json_parser;
+        simdjson::dom::element json_dom = json_parser.load(m_path);
 
-        uint32_t block_magic = 0;
-        file.read((char *)&block_magic, 4);
-
-        file.seekg(512 * block_offset);
-
-        uint8_t *data = new uint8_t[512];
-
-        file.read((char *)data, 512);
-
-        switch (block_magic)
+        for (auto &&i : json_dom["build"])
         {
-        case 0x444c4f46:
-            folder_loading(data);
-            break;
-
-        case 0x454c4946:
-            file_loading(data);
-            break;
-
-        default:
-            throw std::runtime_error("Invalid magic number in file block");
-            break;
+            m_debug_lookup[std::string(i["final"])] =
+                m_debug_base + std::string(i["disk"]);
         }
 
-        delete[] data;
+        m_tree_done = true;
+        return;
     }
+    else
+    {
 
-    m_tree_done = true;
+        std::ifstream file(m_path, std::ios::binary);
+
+        if (!file)
+            throw std::runtime_error("Failed to load bundle " + m_path +
+                                     "! Invalid path/other");
+
+        file.seekg(0, file.end);
+        uint64_t length = file.tellg();
+        file.seekg(0, file.beg);
+
+        uint32_t magic = 0;
+        file.read((char *)&magic, 4);
+
+        if (magic != 0x42415746)
+            throw std::runtime_error("Failed to load bundle " + m_path +
+                                     "! Invalid File Magic");
+
+        file.seekg(512);
+        uint64_t block_offset = 1;
+
+        while ((block_offset + 1) * 512 <= length)
+        {
+            file.seekg(512 * block_offset);
+
+            uint32_t block_magic = 0;
+            file.read((char *)&block_magic, 4);
+
+            file.seekg(512 * block_offset);
+
+            uint8_t *data = new uint8_t[512];
+
+            file.read((char *)data, 512);
+
+            switch (block_magic)
+            {
+            case 0x444c4f46:
+                folder_loading(data);
+                break;
+
+            case 0x454c4946:
+                file_loading(data);
+                break;
+
+            default:
+                throw std::runtime_error("Invalid magic number in block");
+                break;
+            }
+
+            delete[] data;
+        }
+        m_tree_done = true;
+    }
 }
 
 AssetBundle::AssetBundle() { m_tree_done = true; }
@@ -102,6 +103,22 @@ AssetBundle::AssetBundle(const std::string &path)
     m_tree_done = false;
     m_path = path;
 
+    m_debug_base = "";
+
+    m_debug = false;
+
+    build_dir_tree();
+}
+
+AssetBundle::AssetBundle(const std::string &path, const std::string &debug_base)
+{
+    m_tree_done = false;
+    m_path = path;
+
+    m_debug_base = debug_base;
+
+    m_debug = true;
+
     build_dir_tree();
 }
 
@@ -110,32 +127,49 @@ void AssetBundle::build_dir_tree()
     if (m_tree_worker_thread.joinable())
         m_tree_worker_thread.join();
     m_tree_worker_thread = std::thread(&AssetBundle::tree_worker, this);
+    m_tree_worker_thread.join();
 }
 
-void AssetBundle::write(const std::string &path) {}
+void AssetBundle::write(const std::string &path) { load_all(); }
 
 void AssetBundle::load_all() {}
 
-void AssetBundle::add_folder(const std::string &res_path) {}
+void AssetBundle::unload_all() {}
 
-void AssetBundle::add_file(const std::string &res_path,
-                           std::vector<uint8_t> &data)
+std::vector<uint8_t> AssetBundle::get_file_data(const std::string &res_path,
+                                                bool cache) const
 {
-}
+    if (m_tree_worker_thread.joinable())
+        m_tree_worker_thread.join();
 
-void AssetBundle::remove_file(const std::string &res_path) {}
+    if (m_debug)
+    {
+        std::string mod_path = res_path;
+        mod_path = mod_path.erase(0, mod_path.find("://") + 3);
 
-void AssetBundle::remove_folder(const std::string &res_path) {}
+        std::ifstream file(m_debug_lookup[mod_path], std::ios::binary);
 
-std::vector<uint8_t> &AssetBundle::get_file_data(const std::string &res_path,
-                                                 bool cache) const
-{
+        file.seekg(0, file.end);
+        uint64_t length = file.tellg();
+        file.seekg(0, file.beg);
+
+        std::vector<uint8_t> file_data;
+
+        file_data.resize(length);
+
+        file.read((char *)file_data.data(), length);
+        return file_data;
+    }
+    else
+        return std::vector<uint8_t>();
 }
 
 AssetBundle::~AssetBundle()
 {
     if (m_tree_worker_thread.joinable())
         m_tree_worker_thread.join();
+
+    unload_all();
 }
 
 } // namespace Core

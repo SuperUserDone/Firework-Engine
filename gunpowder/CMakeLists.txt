@@ -1,5 +1,6 @@
 set(GUNPOWDER_SOURCE 
     "src/main.cpp"
+    "src/WindowMain.cpp"
 )
 
 set(GUNPOWDER_LIBRARIES

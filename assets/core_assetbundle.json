@@ -1,0 +1,11 @@
+{
+    "name": "core",
+    "build": [
+        {
+            "type": "texture",
+            "format": "DXT1",
+            "disk": "textures/test-albedo.png",
+            "final": "textures/test_albedo.tex"
+        }
+    ]
+}

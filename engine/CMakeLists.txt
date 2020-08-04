@@ -4,6 +4,7 @@ set(FIREWORK_SOURCE
 "src/input/InputKeyboard.cpp"
 "src/input/InputMouse.cpp"
 "src/input/InputWindow.cpp"
+"src/core/io/AssetBundle.cpp"
 "src/core/manager/AssetManager.cpp"
 "src/core/manager/SceneManager.cpp"
 "src/core/misc/Material.cpp"

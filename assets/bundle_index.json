@@ -1,0 +1,11 @@
+{
+    "bundles": [
+        {
+            "name": "core",
+            "cache": false,
+            "debug": true,
+            "debug_path": "assets/core_assetbundle.json",
+            "debug_prefix": "assets/core/"
+        }
+    ]
+}
