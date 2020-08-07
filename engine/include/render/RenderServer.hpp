@@ -18,12 +18,23 @@ namespace FW
 namespace Render
 {
 
+/**
+ * \brief The selection of render backends to choose from
+ *
+ *  RENDER_BACKEND_DUMMY: A dummy render backend, when you requie no rendering
+ *  RENDER_BACKEND_OPENGL: A Render backend using opengl 4.3 Core
+ *
+ */
 enum RendererBackend
 {
     RENDER_BACKEND_DUMMY,
     RENDER_BACKEND_OPENGL43
 };
 
+/**
+ * \brief THe possible actions to be queued to be executed in the render thread
+ *
+ */
 enum ActionType
 {
     ACTION_TYPE_CREATE_TEXTURE,
@@ -36,6 +47,10 @@ enum ActionType
     ACTION_TYPE_DELETE_ASSET_CONTEXT
 };
 
+/**
+ * \brief The action data
+ *
+ */
 union ActionData
 {
     uint id;
@@ -45,6 +60,10 @@ union ActionData
     Backend::AssetContextParams asset_context;
 };
 
+/**
+ * \brief An actual action
+ *
+ */
 struct Action
 {
     Action() { output = std::make_shared<std::promise<uint>>(); }
@@ -54,6 +73,10 @@ struct Action
     std::shared_ptr<std::promise<uint>> output;
 };
 
+/**
+ * \brief The renderer server class
+ *
+ */
 class RenderServer
 {
 private:
@@ -81,6 +104,12 @@ private:
     void operator=(RenderServer const &) = delete;
 
 public:
+    /**
+     * \brief Constructor
+     * 
+     * \param win the settings used for the window
+     * \param backend the backend
+     */
     RenderServer(const Window::WindowSettings &win,
                  RendererBackend backend = RENDER_BACKEND_OPENGL43);
 

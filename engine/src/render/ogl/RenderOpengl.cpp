@@ -39,7 +39,7 @@ RenderOpengl::RenderOpengl()
     glDebugMessageCallback(glDebugOutput, nullptr);
 #endif
 
-    //! TEMP
+    //! TODO TEMP
 
     const char *vertexShaderSource =
         "#version 330 core\n"
@@ -497,9 +497,13 @@ uint RenderOpengl::create_material(const MaterialCreateParams &params)
     return 0;
 }
 
-void RenderOpengl::bind_material(uint material) {}
+void RenderOpengl::bind_material(uint material)
+{ // TODO
+}
 
-void RenderOpengl::delete_material(uint material) {}
+void RenderOpengl::delete_material(uint material)
+{ // TODO
+}
 
 uint RenderOpengl::new_asset_context(const AssetContextParams &params)
 {
@@ -534,7 +538,10 @@ void RenderOpengl::delete_asset_context(uint context)
     }
 }
 
-void RenderOpengl::set_camera(const CameraParams &params) {}
+void RenderOpengl::set_camera(const CameraParams &params)
+{
+    // TODO
+}
 
 void RenderOpengl::add_to_sorted_drawlist(const DrawCommand &command)
 {

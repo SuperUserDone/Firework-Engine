@@ -2,6 +2,8 @@
 
 #include <simdjson.h>
 
+// TODO document
+
 namespace FW
 {
 namespace Core

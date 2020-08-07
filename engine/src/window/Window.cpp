@@ -29,36 +29,50 @@ void Window::make_window()
 {
     ZoneScopedN("Window Creation");
     LOG_F(INFO, "Creating Window %s.", m_settings.title.c_str());
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_window = glfwCreateWindow(  //
-        m_settings.width,         //
-        m_settings.height,        //
-        m_settings.title.c_str(), //
-        nullptr,                  //
-        nullptr                   //
-    );
-
-    if (m_window == nullptr)
+    // Window Hints
     {
-        LOG_F(FATAL, "Failed to open window!");
-        glfwTerminate();
-        exit(-1);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+#ifndef __NDEBUG__
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+#endif
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     }
 
-    Input::InputWindow::init(m_settings.width, m_settings.height);
-    Input::InputWindow::set_resize_provider(Input::WINDOW_SOURCE_GLFW);
+    // Creation
+    {
+        m_window = glfwCreateWindow(  //
+            m_settings.width,         //
+            m_settings.height,        //
+            m_settings.title.c_str(), //
+            nullptr,                  //
+            nullptr                   //
+        );
 
-    Input::InputKeyboard::set_window(m_window);
-    Input::InputMouse::set_window(m_window);
+        if (m_window == nullptr)
+        {
+            LOG_F(FATAL, "Failed to open window!");
+            glfwTerminate();
+            exit(-1);
+        }
+    }
 
-    glfwSetWindowSizeCallback(m_window,
-                              &Input::InputWindow::glfw_resize_callback);
-    glfwSetCharCallback(m_window, &Input::InputKeyboard::character_callback);
-    glfwSetCursorPosCallback(m_window, &Input::InputMouse::glfw_mouse_callback);
+    // Callbacks
+    {
+        Input::InputWindow::init(m_settings.width, m_settings.height);
+        Input::InputWindow::set_resize_provider(Input::WINDOW_SOURCE_GLFW);
+
+        Input::InputKeyboard::set_window(m_window);
+        Input::InputMouse::set_window(m_window);
+
+        glfwSetWindowSizeCallback(m_window,
+                                  &Input::InputWindow::glfw_resize_callback);
+        glfwSetCharCallback(m_window,
+                            &Input::InputKeyboard::character_callback);
+        glfwSetCursorPosCallback(m_window,
+                                 &Input::InputMouse::glfw_mouse_callback);
+    }
 }
 
 /*******************************************************************************/
@@ -78,9 +92,9 @@ Window::Window(const WindowSettings &settings) : m_settings(settings)
 
 void Window::poll_events()
 {
+    ZoneScopedN("Event Polling");
     if (!m_window)
         return;
-    // ZoneScopedN("Event Polling");
     glfwPollEvents();
 }
 
