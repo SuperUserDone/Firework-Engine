@@ -23,9 +23,9 @@ private:
 public:
     Keymap() {}
 
-    void set_mapping(const std::string &name, KeyCode code);
+    void set_mapping(const std::string &name, KeyCode code); // TODO
 
-    KeyCode get_mapping(const std::string &name);
+    KeyCode get_mapping(const std::string &name); // TODO
 };
 
 } // namespace Input

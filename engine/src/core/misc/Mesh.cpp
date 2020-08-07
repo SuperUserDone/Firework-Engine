@@ -7,7 +7,9 @@ namespace Core
 
 Mesh::Mesh() {}
 
-Mesh::Mesh(const std::string &res_path) {}
+Mesh::Mesh(const std::string &res_path)
+{ // TODO
+}
 
 Mesh::Mesh(const std::vector<Vertex> &data, const std::vector<uint> &index_data)
 {

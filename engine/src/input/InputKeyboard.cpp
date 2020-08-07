@@ -24,6 +24,7 @@ bool InputKeyboard::is_key_down(const std::string &mapped_name)
 void InputKeyboard::character_callback(GLFWwindow *window,
                                        unsigned int codepoint)
 {
+    // TODO
 }
 
 } // namespace Input

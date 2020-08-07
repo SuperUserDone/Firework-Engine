@@ -4,7 +4,6 @@
 
 #include <simdjson.h>
 
-
 // TODO comment
 namespace FW
 {
@@ -132,11 +131,20 @@ void AssetBundle::build_dir_tree()
     m_tree_worker_thread.join();
 }
 
-void AssetBundle::write(const std::string &path) { load_all(); }
+void AssetBundle::write(const std::string &path)
+{
+    load_all(); // TODO
+}
 
-void AssetBundle::load_all() {}
+void AssetBundle::load_all()
+{
+    // TODO
+}
 
-void AssetBundle::unload_all() {}
+void AssetBundle::unload_all()
+{
+    // TODO
+}
 
 std::shared_ptr<std::vector<uint8_t>>
 AssetBundle::get_file_data(const std::string &res_path, bool cache) const

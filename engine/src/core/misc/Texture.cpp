@@ -31,7 +31,7 @@ void Texture::reload()
 
     Render::RenderServer &m_server = Render::RenderServer::get_instance();
 
-    if (!m_id)
+    if (m_id)
         m_server.delete_texture(m_id);
 
     m_id = m_server.create_texture(m_texture_params).get();
@@ -49,7 +49,7 @@ uint Texture::get_id() { return m_id; }
 Texture::~Texture()
 {
     Render::RenderServer &m_server = Render::RenderServer::get_instance();
-    if (!m_id)
+    if (m_id)
         m_server.delete_texture(m_id);
 }
 

@@ -620,6 +620,7 @@ RenderOpengl::~RenderOpengl()
     for (auto &&context : m_asset_contexts)
     {
         delete_asset_context(context.first);
+        // TODO Check
     }
 }
 

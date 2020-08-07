@@ -58,7 +58,9 @@ void RendererMesh::queue_render()
     RenderServer::get_instance().add_to_opaque_drawlist(cmd);
 }
 
-RendererMesh::~RendererMesh() {}
+RendererMesh::~RendererMesh()
+{ // TODO check
+}
 
 } // namespace Render
 } // namespace FW
