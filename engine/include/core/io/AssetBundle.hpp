@@ -47,8 +47,8 @@ public:
     void load_all();
     void unload_all();
 
-    std::vector<uint8_t> get_file_data(const std::string &res_path,
-                                       bool cache = false) const;
+    std::shared_ptr<std::vector<uint8_t>>
+    get_file_data(const std::string &res_path, bool cache = false) const;
 
     ~AssetBundle();
 };

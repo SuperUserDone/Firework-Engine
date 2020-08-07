@@ -136,8 +136,8 @@ void AssetBundle::load_all() {}
 
 void AssetBundle::unload_all() {}
 
-std::vector<uint8_t> AssetBundle::get_file_data(const std::string &res_path,
-                                                bool cache) const
+std::shared_ptr<std::vector<uint8_t>>
+AssetBundle::get_file_data(const std::string &res_path, bool cache) const
 {
     if (m_tree_worker_thread.joinable())
         m_tree_worker_thread.join();
@@ -153,15 +153,16 @@ std::vector<uint8_t> AssetBundle::get_file_data(const std::string &res_path,
         uint64_t length = file.tellg();
         file.seekg(0, file.beg);
 
-        std::vector<uint8_t> file_data;
+        std::shared_ptr<std::vector<uint8_t>> file_data =
+            std::make_shared<std::vector<uint8_t>>();
 
-        file_data.resize(length);
+        file_data->resize(length);
 
-        file.read((char *)file_data.data(), length);
+        file.read((char *)file_data->data(), length);
         return file_data;
     }
     else
-        return std::vector<uint8_t>();
+        return std::make_shared<std::vector<uint8_t>>();
 }
 
 AssetBundle::~AssetBundle()

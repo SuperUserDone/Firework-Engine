@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include <render/RenderServer.hpp>
+
 namespace FW
 {
 namespace Input
@@ -22,6 +24,11 @@ void InputWindow::set_resize_provider(WindowSource provider)
     m_provider = provider;
 }
 
+void InputWindow::resize_internal(uint x, uint y)
+{
+    Render::RenderServer::get_instance().resize_callback(x, y);
+}
+
 void InputWindow::imgui_resize_callback(uint width, uint height)
 {
     if (m_provider != WINDOW_SOURCE_IMGUI)
@@ -29,6 +36,7 @@ void InputWindow::imgui_resize_callback(uint width, uint height)
 
     sizex = width;
     sizey = height;
+    resize_internal(width, height);
 }
 
 void InputWindow::glfw_resize_callback(GLFWwindow *win, int width, int height)
@@ -38,6 +46,7 @@ void InputWindow::glfw_resize_callback(GLFWwindow *win, int width, int height)
 
     sizex = width;
     sizey = height;
+    resize_internal(width, height);
 }
 
 } // namespace Input

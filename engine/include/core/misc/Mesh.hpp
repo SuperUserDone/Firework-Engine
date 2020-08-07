@@ -32,12 +32,12 @@ private:
 
 public:
     Mesh();
+    Mesh(const std::string &res_path);
+    Mesh(const std::vector<Vertex> &data, const std::vector<uint> &index_data);
 
     // Loading
-    void load_from_file(const std::string &path);
-    void load_from_resource(const std::string &res_path);
-    void load_from_vertex_data(const std::vector<Vertex> &data,
-                               const std::vector<uint> &index_data);
+    void reload();
+    void full_reload();
 
     // Getters
     std::vector<Vertex> &get_data();

@@ -23,9 +23,11 @@ int main()
     vertex_data.push_back(vert);
     vert.pos = {-0.5f, 0.5f, 0.0f};
     vertex_data.push_back(vert);
+    vert.pos = {-0.5f, -0.5f, 0.0f};
+    vertex_data.push_back(vert);
 
-    FW::Core::MeshPtr mesh = std::make_shared<FW::Core::Mesh>();
-    mesh->load_from_vertex_data(vertex_data, {0, 1, 2});
+    FW::Core::MeshPtr mesh = std::make_shared<FW::Core::Mesh>(
+        vertex_data, std::vector<uint>{0, 1, 2, 1, 2, 3});
     FW::Render::RendererMesh mesh_render(mesh);
 
     FW::Render::Backend::AssetContextParams params;

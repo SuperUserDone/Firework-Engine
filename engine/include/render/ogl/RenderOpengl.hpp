@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <mutex>
 #include <queue>
 #include <string>
@@ -36,6 +37,16 @@ struct _Model
     uint index_size;
 };
 
+struct _Texture
+{
+    uint texture_id;
+    uint context_id;
+
+    uint int_id;
+
+    uint type;
+};
+
 class RenderOpengl : public RenderBase
 {
 private:
@@ -47,19 +58,29 @@ private:
     std::unordered_map<uint, AssetContext> m_asset_contexts;
 
     std::unordered_map<uint, _Model> m_models;
+    std::unordered_map<uint, _Texture> m_textures;
 
     uint m_model_id_index = 0;
+    uint m_texture_id_index = 0;
     uint m_context_id_index = 0;
+
+    std::atomic_int m_size_x;
+    std::atomic_int m_size_y;
+
+    std::atomic_bool m_resized;
 
 public:
     RenderOpengl();
+
+    // Meta
+    virtual void resize_callback(int x, int y) override;
 
     // Textures
     uint create_texture(const TextureCreateParams &params) override;
     void bind_texture(uint slot, uint texture) override;
     void delete_texture(uint texture) override;
 
-    // Moddles
+    // Models
     uint create_model(const ModelCreateParams &params) override;
     void draw_model(uint model) override;
     void delete_model(uint model) override;

@@ -92,12 +92,15 @@ public:
         return instance;
     }
 
+    // Meta
+    void resize_callback(int x, int y);
+
     // Textures
     virtual std::future<uint>
     create_texture(const Backend::TextureCreateParams &params);
     virtual void delete_texture(uint texture);
 
-    // Moddles
+    // Models
     virtual std::future<uint>
     create_model(const Backend::ModelCreateParams &params);
     virtual void delete_model(uint model);

@@ -13,6 +13,10 @@ namespace Backend
 
 RenderOpengl::RenderOpengl()
 {
+    m_resized = false;
+    m_size_x = 800;
+    m_size_y = 600;
+
     ZoneScopedN("Opengl init");
     LOG_F(INFO, "Loading OpenGL");
 
@@ -22,7 +26,7 @@ RenderOpengl::RenderOpengl()
         std::terminate();
     }
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, m_size_x, m_size_y);
 
     // glEnable(GL_DEPTH_TEST);
     // glEnable(GL_CULL_FACE);
@@ -103,13 +107,247 @@ RenderOpengl::RenderOpengl()
     //! TEMP
 }
 
+void RenderOpengl::resize_callback(int x, int y)
+{
+    m_size_x = x;
+    m_size_y = y;
+    m_resized = true;
+}
+
 uint RenderOpengl::create_texture(const TextureCreateParams &params)
 {
+    // Sanity checks
+    {
+        // Context
+        if (m_asset_contexts.find(params.asset_context) ==
+            m_asset_contexts.end())
+            throw std::invalid_argument("Context invaild for texture creation");
+
+        // Mesh
+        if (!params.data)
+            throw std::invalid_argument(
+                "Texture cannot be null for model creation. "
+                "This should be IMPOSSIBLE with the normal api. "
+                "DO NOT USE RENDER SERVER API DIRECTLY!!! "
+                "IT WILL BREAK IF YOU DO.");
+    }
+
+    _Texture tex;
+
+    // id generation
+    {
+        glGenTextures(1, &tex.int_id);
+    }
+
+    // Wrapping
+    int wrap = 0;
+    int mag, min = 0;
+    {
+        // Wrapping
+        switch (params.wrap)
+        {
+        case Core::TEXTURE_WRAP_REPEAT:
+            wrap = GL_REPEAT;
+            break;
+
+        case Core::TEXTURE_WRAP_MIRRORED_REPEAT:
+            wrap = GL_MIRRORED_REPEAT;
+            break;
+
+        case Core::TEXTURE_WRAP_CLAMP:
+            wrap = GL_CLAMP_TO_EDGE;
+            break;
+        }
+    }
+    {
+        // Min and mag filtering
+        for (size_t i = 0; i < 2; i++)
+        {
+            int val = 0;
+            switch (i ? params.scale_min : params.scale_mag)
+            {
+            case Core::TEXTURE_FILTER_LINEAR:
+                val = GL_LINEAR;
+                break;
+            case Core::TEXTURE_FILTER_LINEAR_MIPMAP_LINEAR:
+                val = GL_LINEAR_MIPMAP_LINEAR;
+                break;
+
+            case Core::TEXTURE_FILTER_LINEAR_MIPMAP_NEAREST:
+                val = GL_LINEAR_MIPMAP_NEAREST;
+                break;
+
+            case Core::TEXTURE_FILTER_NEAREST:
+                val = GL_NEAREST;
+                break;
+
+            case Core::TEXTURE_FILTER_NEAREST_MIPMAP_LINEAR:
+                val = GL_NEAREST_MIPMAP_LINEAR;
+                break;
+
+            case Core::TEXTURE_FILTER_NEAREST_MIPMAP_NEAREST:
+                val = GL_NEAREST_MIPMAP_NEAREST;
+                break;
+            }
+            i ? min = val : mag = val;
+        }
+        if (mag != GL_NEAREST || mag != GL_LINEAR)
+            std::invalid_argument(
+                "Texture mag filter cannot be of mipmap type");
+    }
+
+    // Types
+    int dims = 0;
+    int type = 0;
+    int format = 0;
+    {
+        switch (params.type)
+        {
+        case Core::TEXTURE_TYPE_1D:
+            type = GL_TEXTURE_1D;
+            dims = 1;
+            break;
+        case Core::TEXTURE_TYPE_2D:
+            type = GL_TEXTURE_2D;
+            dims = 2;
+            break;
+        case Core::TEXTURE_TYPE_3D:
+            type = GL_TEXTURE_3D;
+            dims = 3;
+            break;
+
+        case Core::TEXTURE_TYPE_CUBEMAP:
+            type = GL_TEXTURE_CUBE_MAP;
+            dims = 0;
+            break;
+        }
+
+        // Channels
+        switch (params.channels)
+        {
+        case 1:
+            format = GL_RED;
+            break;
+
+        case 2:
+            format = GL_RG;
+            break;
+
+        case 3:
+            format = GL_RGB;
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    // Params
+    {
+        glBindTexture(type, tex.int_id);
+        if (type == GL_TEXTURE_CUBE_MAP)
+        {
+            // TODO
+            std::runtime_error("Cubemaps not implemented yet");
+        }
+        else
+        {
+            // Wraping
+            glTexParameteri(type, GL_TEXTURE_WRAP_S, wrap);
+            if (dims == 2)
+                glTexParameteri(type, GL_TEXTURE_WRAP_S, wrap);
+            if (dims == 3)
+                glTexParameteri(type, GL_TEXTURE_WRAP_T, wrap);
+
+            // Filtering
+            glTexParameteri(type, GL_TEXTURE_MAG_FILTER, mag);
+            glTexParameteri(type, GL_TEXTURE_MIN_FILTER, min);
+        }
+    }
+
+    // Uploading
+    {
+        switch (dims)
+        {
+        case 1:
+            glTexImage1D(type, 0, format, params.sizex, 0, format,
+                         GL_UNSIGNED_BYTE, params.data);
+            break;
+        case 2:
+            glTexImage2D(type, 0, format, params.sizex, params.sizey, 0, format,
+                         GL_UNSIGNED_BYTE, params.data);
+            break;
+        case 3:
+            glTexImage3D(type, 0, format, params.sizex, params.sizey,
+                         params.sizez, 0, format, GL_UNSIGNED_BYTE,
+                         params.data);
+            break;
+        }
+    }
+
+    // Metadata
+    {
+        tex.texture_id = m_texture_id_index++;
+        tex.context_id = params.asset_context;
+        tex.type = type;
+
+        m_textures[tex.texture_id] = tex;
+
+        Asset asset;
+
+        asset.type = ASSET_TYPE_TEXTURE;
+        asset.value = tex.texture_id;
+
+        m_asset_contexts[tex.context_id].m_assets.push_back(asset);
+    }
+
     return 0;
 }
-void RenderOpengl::bind_texture(uint slot, uint texture) {}
 
-void RenderOpengl::delete_texture(uint texture) {}
+void RenderOpengl::bind_texture(uint slot, uint texture)
+{
+    _Texture &tex = m_textures[texture];
+
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(tex.type, tex.int_id);
+}
+
+void RenderOpengl::delete_texture(uint texture)
+{
+    // Get ref to texture
+    _Texture &tex = m_textures[texture];
+
+    // Delete in GL
+    glDeleteTextures(1, &tex.int_id);
+
+    // Delete from asset context
+    {
+        auto &assets_ref = m_asset_contexts[tex.context_id].m_assets;
+        auto index = assets_ref.end();
+        for (auto i = assets_ref.begin(); i != assets_ref.end(); i++)
+        {
+            if (i->value == tex.texture_id && i->type == ASSET_TYPE_TEXTURE)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        if (index != assets_ref.end())
+        {
+            assets_ref.erase(index);
+        }
+        else
+        {
+            std::runtime_error("Asset not in asset context!");
+            // this should be 100% impossible but for incase:
+            // https://i.kym-cdn.com/photos/images/newsfeed/000/173/576/Wat8.jpg?1315930535
+        }
+    }
+
+    // Delete from model array
+    m_textures.erase(texture);
+}
 
 uint RenderOpengl::create_model(const ModelCreateParams &params)
 {
@@ -197,7 +435,7 @@ uint RenderOpengl::create_model(const ModelCreateParams &params)
 
 void RenderOpengl::draw_model(uint model)
 {
-    _Model model_temp = m_models[model];
+    _Model &model_temp = m_models[model];
 
     glBindVertexArray(model_temp.array_buffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model_temp.element_buffer);
@@ -206,16 +444,40 @@ void RenderOpengl::draw_model(uint model)
 
 void RenderOpengl::delete_model(uint model)
 {
-    _Model model_temp = m_models[model];
+    // Get model
+    _Model &model_temp = m_models[model];
 
+    // Delete GL buffers
     glDeleteVertexArrays(1, &model_temp.array_buffer);
     glDeleteBuffers(1, &model_temp.element_buffer);
     glDeleteBuffers(1, &model_temp.data_buffer);
-}
 
-uint RenderOpengl::create_material(const MaterialCreateParams &params)
-{
-    return 0;
+    // Delete from asset context
+    {
+        auto &assets_ref = m_asset_contexts[model_temp.context_id].m_assets;
+        auto index = assets_ref.end();
+        for (auto i = assets_ref.begin(); i != assets_ref.end(); i++)
+        {
+            if (i->value == model_temp.model_id && i->type == ASSET_TYPE_MODEL)
+            {
+                index = i;
+                break;
+            }
+        }
+        if (index != assets_ref.end())
+        {
+            assets_ref.erase(index);
+        }
+        else
+        {
+            std::runtime_error("Asset not in asset context!");
+            // this should be 100% impossible but for incase:
+            // https://i.kym-cdn.com/photos/images/newsfeed/000/173/576/Wat8.jpg?1315930535
+        }
+    }
+
+    // Delete from model array
+    m_models.erase(model);
 }
 
 void RenderOpengl::set_model_properties(const ModelProperties &props)
@@ -227,6 +489,12 @@ void RenderOpengl::set_model_properties(const ModelProperties &props)
 
     glUniformMatrix4fv(10, 1, GL_FALSE, &props.model_matrix[0][0]);
     glUniformMatrix3fv(11, 1, GL_FALSE, &normal[0][0]);
+}
+
+uint RenderOpengl::create_material(const MaterialCreateParams &params)
+{
+    // TODO
+    return 0;
 }
 
 void RenderOpengl::bind_material(uint material) {}
@@ -289,6 +557,12 @@ void RenderOpengl::clear_drawlists()
 
 void RenderOpengl::render()
 {
+
+    if (m_resized)
+    {
+        glViewport(0, 0, m_size_x, m_size_y);
+        m_resized = true;
+    }
 
     std::vector<DrawCommand> unsorted;
     std::vector<DrawCommand> sorted;

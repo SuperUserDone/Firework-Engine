@@ -104,6 +104,11 @@ RenderServer::RenderServer(const Window::WindowSettings &win,
     m_init_future.wait();
 }
 
+void RenderServer::resize_callback(int x, int y)
+{
+    m_render_backend->resize_callback(x, y);
+}
+
 std::future<uint>
 RenderServer::create_texture(const Backend::TextureCreateParams &params)
 {

@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "core/misc/Mesh.hpp"
+#include "core/misc/Texture.hpp"
 
 namespace FW
 {
@@ -69,6 +70,20 @@ struct DrawCommand
 struct TextureCreateParams
 {
     uint asset_context;
+    uint8_t *data;
+
+    int channels;
+
+    int sizex;
+    int sizey;
+    int sizez;
+
+    bool gen_mipmaps;
+
+    Core::TextureType type;
+    Core::WrapMode wrap;
+    Core::TextureScaleFilter scale_min;
+    Core::TextureScaleFilter scale_mag;
 };
 
 struct ModelCreateParams
@@ -95,6 +110,9 @@ class RenderBase
 {
 private:
 public:
+    // Callbacks
+    virtual void resize_callback(int x, int y) = 0;
+
     // Textures
     virtual uint create_texture(const TextureCreateParams &params) = 0;
     virtual void bind_texture(uint slot, uint texture) = 0;
