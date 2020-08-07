@@ -20,6 +20,9 @@ private:
 public:
     RenderDummy();
 
+    // Meta
+    virtual void resize_callback(int x, int y) override;
+
     // Textures
     virtual uint create_texture(const TextureCreateParams &params) override;
     virtual void bind_texture(uint slot, uint texture) override;

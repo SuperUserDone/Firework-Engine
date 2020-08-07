@@ -53,4 +53,4 @@ configure_file(engine/include/Version.hpp.in Version.hpp)
 
 add_subdirectory("engine")
 add_subdirectory("playground")
-add_subdirectory("gunpowder")
+#add_subdirectory("gunpowder")

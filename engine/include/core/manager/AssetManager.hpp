@@ -20,7 +20,7 @@ namespace Core
 struct LoadCommand
 {
     std::string res_path;
-    std::shared_ptr<std::promise<std::vector<uint8_t>>> data;
+    std::shared_ptr<std::promise<std::shared_ptr<std::vector<uint8_t>>>> data;
 };
 
 class AssetManager
@@ -53,7 +53,10 @@ public:
     void load_bundle(const std::string &name);
     void unload_bundle(const std::string &name);
 
-    std::future<std::vector<uint8_t>> load_data(const std::string &res_path);
+    std::future<std::shared_ptr<std::vector<uint8_t>>>
+    load_data(const std::string &res_path);
+
+    
 
     ~AssetManager();
 };

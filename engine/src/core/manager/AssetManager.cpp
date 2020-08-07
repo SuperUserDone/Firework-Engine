@@ -60,11 +60,12 @@ void AssetManager::load_bundle(const std::string &name) {}
 
 void AssetManager::unload_bundle(const std::string &name) {}
 
-std::future<std::vector<uint8_t>>
+std::future<std::shared_ptr<std::vector<uint8_t>>>
 AssetManager::load_data(const std::string &res_path)
 {
     LoadCommand cmd;
-    cmd.data = std::make_shared<std::promise<std::vector<uint8_t>>>();
+    cmd.data =
+        std::make_shared<std::promise<std::shared_ptr<std::vector<uint8_t>>>>();
     cmd.res_path = res_path;
 
     m_worker_queue.enqueue(cmd);

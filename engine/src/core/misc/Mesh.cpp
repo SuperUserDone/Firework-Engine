@@ -7,12 +7,9 @@ namespace Core
 
 Mesh::Mesh() {}
 
-void Mesh::load_from_file(const std::string &path) {}
+Mesh::Mesh(const std::string &res_path) {}
 
-void Mesh::load_from_resource(const std::string &res_path) {}
-
-void Mesh::load_from_vertex_data(const std::vector<Vertex> &data,
-                                 const std::vector<uint> &index_data)
+Mesh::Mesh(const std::vector<Vertex> &data, const std::vector<uint> &index_data)
 {
     m_vertex_data = data;
     m_indices = index_data;

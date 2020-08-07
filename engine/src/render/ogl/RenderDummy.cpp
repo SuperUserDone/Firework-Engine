@@ -9,6 +9,8 @@ namespace Backend
 
 RenderDummy::RenderDummy() {}
 
+void RenderDummy::resize_callback(int x, int y) {}
+
 uint RenderDummy::create_texture(const TextureCreateParams &params)
 {
     return 0;
