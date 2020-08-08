@@ -58,8 +58,8 @@ public:
 
     static void imgui_mouse_callback(double x, double y);
 
-    static void scroll_callback(GLFWwindow *window, double xoffset,
-                                double yoffset);
+    static void
+    scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 };
 
 } // namespace Input

@@ -52,7 +52,8 @@ void InputMouse::imgui_mouse_callback(double x, double y)
     m_y = y;
 }
 
-void InputMouse::scroll_callback(GLFWwindow *window, double xoffset,
+void InputMouse::scroll_callback(GLFWwindow *window,
+                                 double xoffset,
                                  double yoffset)
 { // TODO
 }

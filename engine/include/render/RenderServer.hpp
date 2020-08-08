@@ -106,7 +106,7 @@ private:
 public:
     /**
      * \brief Constructor
-     * 
+     *
      * \param win the settings used for the window
      * \param backend the backend
      */

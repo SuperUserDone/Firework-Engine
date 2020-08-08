@@ -1,9 +1,13 @@
 #include "render/ogl/RenderOpengl.hpp"
 #include <loguru.hpp>
 
-void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
-                            GLenum severity, GLsizei length,
-                            const char *message, const void *userParam);
+void APIENTRY glDebugOutput(GLenum source,
+                            GLenum type,
+                            unsigned int id,
+                            GLenum severity,
+                            GLsizei length,
+                            const char *message,
+                            const void *userParam);
 namespace FW
 {
 namespace Render
@@ -276,16 +280,36 @@ uint RenderOpengl::create_texture(const TextureCreateParams &params)
         switch (dims)
         {
         case 1:
-            glTexImage1D(type, 0, format, params.sizex, 0, format,
-                         GL_UNSIGNED_BYTE, params.data);
+            glTexImage1D(type,
+                         0,
+                         format,
+                         params.sizex,
+                         0,
+                         format,
+                         GL_UNSIGNED_BYTE,
+                         params.data);
             break;
         case 2:
-            glTexImage2D(type, 0, format, params.sizex, params.sizey, 0, format,
-                         GL_UNSIGNED_BYTE, params.data);
+            glTexImage2D(type,
+                         0,
+                         format,
+                         params.sizex,
+                         params.sizey,
+                         0,
+                         format,
+                         GL_UNSIGNED_BYTE,
+                         params.data);
             break;
         case 3:
-            glTexImage3D(type, 0, format, params.sizex, params.sizey,
-                         params.sizez, 0, format, GL_UNSIGNED_BYTE,
+            glTexImage3D(type,
+                         0,
+                         format,
+                         params.sizex,
+                         params.sizey,
+                         params.sizez,
+                         0,
+                         format,
+                         GL_UNSIGNED_BYTE,
                          params.data);
             break;
         }
@@ -404,19 +428,31 @@ uint RenderOpengl::create_model(const ModelCreateParams &params)
         glBindVertexArray(model.array_buffer);
         glBindBuffer(GL_ARRAY_BUFFER, model.array_buffer);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Core::Vertex),
-                              (void *)0);
+        glVertexAttribPointer(
+            0, 3, GL_FLOAT, GL_FALSE, sizeof(Core::Vertex), (void *)0);
 
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Core::Vertex),
+        glVertexAttribPointer(1,
+                              3,
+                              GL_FLOAT,
+                              GL_FALSE,
+                              sizeof(Core::Vertex),
                               (void *)offsetof(Core::Vertex, normal));
 
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Core::Vertex),
+        glVertexAttribPointer(2,
+                              2,
+                              GL_FLOAT,
+                              GL_FALSE,
+                              sizeof(Core::Vertex),
                               (void *)offsetof(Core::Vertex, uvs));
 
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Core::Vertex),
+        glVertexAttribPointer(3,
+                              3,
+                              GL_FLOAT,
+                              GL_FALSE,
+                              sizeof(Core::Vertex),
                               (void *)offsetof(Core::Vertex, tangent));
     }
 
@@ -638,9 +674,13 @@ RenderOpengl::~RenderOpengl()
 } // namespace Render
 } // namespace FW
 
-void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
-                            GLenum severity, GLsizei length,
-                            const char *message, const void *userParam)
+void APIENTRY glDebugOutput(GLenum source,
+                            GLenum type,
+                            unsigned int id,
+                            GLenum severity,
+                            GLsizei length,
+                            const char *message,
+                            const void *userParam)
 {
     // ignore non-significant error/warning codes
     if (id == 131169 || id == 131185 || id == 131218 || id == 131204 || id == 1)

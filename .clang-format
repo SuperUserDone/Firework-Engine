@@ -2,6 +2,8 @@
 AccessModifierOffset: '-4'
 AlignAfterOpenBracket: Align
 AlwaysBreakTemplateDeclarations: 'Yes'
+BinPackArguments: 'false'
+BinPackParameters: 'false'
 BreakBeforeBraces: Allman
 IndentWidth: '4'
 Language: Cpp

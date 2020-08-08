@@ -56,8 +56,6 @@ public:
     std::future<std::shared_ptr<std::vector<uint8_t>>>
     load_data(const std::string &res_path);
 
-    
-
     ~AssetManager();
 };
 
