@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -60,7 +61,7 @@ private:
 
     std::shared_ptr<std::vector<uint8_t>> m_data;
 
-    uint m_id = 0;
+    std::optional<uint> m_id;
 
 public:
     Texture();

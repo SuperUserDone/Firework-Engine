@@ -2,6 +2,7 @@
 #include <memory>
 
 #include <core/manager/AssetManager.hpp>
+#include <core/misc/Texture.hpp>
 #include <render/RenderServer.hpp>
 #include <render/RendererMesh.hpp>
 #include <window/Window.hpp>
@@ -36,6 +37,10 @@ int main()
 
     FW::Render::Backend::DrawCommand cmd;
     cmd.type = FW::Render::Backend::DRAW_COMMAND_BEGIN;
+
+    FW::Core::Texture tex;
+
+    tex.reload();
 
     while (!server.check_close())
     {

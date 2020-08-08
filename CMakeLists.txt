@@ -44,7 +44,7 @@ if(${FIREWORK_TRACY_PROFILER})
 add_definitions(-DTRACY_ENABLE)
 endif()
 
-add_definitions(-W -Wall -pedantic -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-value -Wno-sign-compare)
+add_definitions(-W -Wall -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-value -Wno-sign-compare)
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 add_library(tracy SHARED "tracy/TracyClient.cpp")

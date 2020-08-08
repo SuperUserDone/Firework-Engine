@@ -42,18 +42,24 @@ RenderOpengl::RenderOpengl()
     //! TODO TEMP
 
     const char *vertexShaderSource =
-        "#version 330 core\n"
+        "#version 430 core\n"
         "layout (location = 0) in vec3 aPos;\n"
+        "layout (location = 2) in vec2 uvs_in;\n"
+        "layout(location = 10) uniform mat4 model;\n"
+        "layout(location = 11) uniform mat3 model_normal;\n"
+        "out vec2 uvs_out;\n"
         "void main()\n"
         "{\n"
         "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
         "}\0";
-    const char *fragmentShaderSource =
-        "#version 330 core\n"
+    const char *fragmentShaderSource = //
+        "#version 430 core\n"
+        "in vec2 uvs_out;\n"
         "out vec4 FragColor;\n"
+        "layout(binding = 0, location = 12) uniform sampler2D tex;\n"
         "void main()\n"
         "{\n"
-        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+        "   FragColor = texture(tex, uvs_out);\n"
         "}\n\0";
 
     // build and compile our shader program
@@ -487,8 +493,12 @@ void RenderOpengl::set_model_properties(const ModelProperties &props)
     glm::mat3 normal =
         glm::mat3(glm::transpose(glm::inverse(props.model_matrix)));
 
+    //! TEMP
     glUniformMatrix4fv(10, 1, GL_FALSE, &props.model_matrix[0][0]);
     glUniformMatrix3fv(11, 1, GL_FALSE, &normal[0][0]);
+
+    glUniform1i(12, 0);
+    //! TEMP
 }
 
 uint RenderOpengl::create_material(const MaterialCreateParams &params)
@@ -594,7 +604,7 @@ void RenderOpengl::render()
             switch (command.type)
             {
             case DRAW_COMMAND_MODEL:
-                // set_model_properties(command.data.model.props);
+                set_model_properties(command.data.model.props);
                 draw_model(command.data.model.model);
                 break;
 
