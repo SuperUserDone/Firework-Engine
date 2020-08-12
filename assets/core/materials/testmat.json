@@ -1,13 +1,39 @@
 {
-    "material": {
-        "name": "Test",
-        "vertex": "assets/materials/shaders/test.vertex.glsl",
-        "fragment": "assets/materials/shaders/test.fragment.glsl",
-        "textures": {
-            "albedo": "assets/materials/textures/test-albedo.png",
-            "normal": "assets/materials/textures/test-normal.png",
-            "metalic": "assets/materials/textures/test-metallic.png",
-            "roughness": "assets/materials/textures/test-roughness.png"
+    "name": "Test",
+    "type": "Dyn",
+    "pipeline": [
+        {
+            "stage": "vertex",
+            "ogl": "core://materials/shaders/test.vert.glsl"
         }
-    }
+    ],
+    "values": [
+        {
+            "type": "tex2d",
+            "bind": 0,
+            "val": {
+                "resource": "core://textures/test-albedo.tex"
+            }
+        },
+        {
+            "type": "vec3",
+            "bind": 10,
+            "val": {
+                "internal": "model"
+            }
+        },
+        {
+            "type": "vec3",
+            "bind": 11,
+            "val": {
+                "internal": "model_normal"
+            }
+        },
+        {
+            "type": "block",
+            "val": {
+                "internal": "camera"
+            }
+        }
+    ]
 }

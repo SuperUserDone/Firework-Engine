@@ -1,6 +1,7 @@
 set(FIREWORK_SOURCE
 "../glad/src/glad.c"
 "../loguru/loguru.cpp"
+"src/core/entity/Components.cpp"
 "src/core/io/AssetBundle.cpp"
 "src/core/manager/AssetManager.cpp"
 "src/core/misc/Material.cpp"

@@ -1,0 +1,9 @@
+{
+    "debug": {
+        "path": "core://textures/test-albedo.png"
+    },
+    "runtime": {
+        "path": "core://textures/test-albedo.ktx"
+    },
+    "comp": "DXT1"
+}

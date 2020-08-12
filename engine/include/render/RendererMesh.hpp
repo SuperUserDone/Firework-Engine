@@ -12,6 +12,8 @@ namespace FW
 namespace Render
 {
 
+// TODO Refactor
+
 class RendererMesh : public Renderer
 {
 private:

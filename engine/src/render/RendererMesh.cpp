@@ -59,7 +59,7 @@ void RendererMesh::queue_render()
 }
 
 RendererMesh::~RendererMesh()
-{ // TODO check
+{ // TODO destroy in memory
 }
 
 } // namespace Render
