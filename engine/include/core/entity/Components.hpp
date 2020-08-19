@@ -5,7 +5,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "render/RendererMesh.hpp"
+#include "core/misc/Mesh.hpp"
 
 namespace FW
 {
@@ -86,7 +86,9 @@ public:
 
 struct ComponentRenderMesh
 {
-    Render::RendererMesh mesh;
+    MeshPtr mesh;
+
+    uint32_t platform_data[6];
 };
 
 struct ComponentMaterial
@@ -103,7 +105,10 @@ struct ComponentRelationship
 
 struct ComponentTag
 {
-    std::string name;
+    ComponentTag() = default;
+    ComponentTag(const std::string &name) : m_name(name) {}
+
+    std::string m_name;
 };
 
 } // namespace Core
